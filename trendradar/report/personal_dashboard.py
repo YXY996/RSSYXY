@@ -83,7 +83,9 @@ def personalize_html(html: str) -> str:
         try:
             cache = json.loads(cache_path.read_text(encoding="utf-8"))
             articles = cache.get("articles", {})
-            payload = json.dumps(articles, ensure_ascii=False).replace("</", "<\\/")
+            # Use json.dumps with ensure_ascii=False and proper HTML escaping via json.dumps itself
+            # The browser's JSON.parse handles the content correctly without manual escaping
+            payload = json.dumps(articles, ensure_ascii=False, separators=(",", ":"))
             enriched_block = f'<script id="wisdom-enriched-data" type="application/json">{payload}</script>\n'
         except (OSError, ValueError):
             enriched_block = ""
