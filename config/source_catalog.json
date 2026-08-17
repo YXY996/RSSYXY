@@ -1,0 +1,186 @@
+{
+  "updated_at": "2026-08-17",
+  "policy": {
+    "primary_language": "zh",
+    "display_rule": "中文优先；日文和英文保留原文，并在本机 AI 可用时生成中文镜像",
+    "activation_rule": "只有通过 HTTP 与 Feed 格式验证的来源才加入 sources.json"
+  },
+  "sources": [
+    {
+      "id": "publickey-jp",
+      "name": "Publickey 日本 IT",
+      "category": "日本科技市场",
+      "language": "ja",
+      "url": "https://www.publickey1.jp/atom.xml",
+      "official_page": "https://www.publickey1.jp/",
+      "priority": "high",
+      "enabled": true,
+      "notes": "日本企业 IT、云、开发者与基础设施"
+    },
+    {
+      "id": "itmedia-ai",
+      "name": "ITmedia AI＋",
+      "category": "日本科技市场",
+      "language": "ja",
+      "url": "https://rss.itmedia.co.jp/rss/2.0/aiplus.xml",
+      "official_page": "https://corp.itmedia.co.jp/media/rss_list/",
+      "priority": "high",
+      "enabled": true,
+      "notes": "日本 AI 产品、企业采用和产业动态"
+    },
+    {
+      "id": "itmedia-enterprise",
+      "name": "ITmedia Enterprise",
+      "category": "日本科技市场",
+      "language": "ja",
+      "url": "https://rss.itmedia.co.jp/rss/2.0/enterprise.xml",
+      "official_page": "https://corp.itmedia.co.jp/media/rss_list/",
+      "priority": "high",
+      "enabled": true,
+      "notes": "日本企业 IT、云、安全与数字化"
+    },
+    {
+      "id": "atmarkit",
+      "name": "＠IT",
+      "category": "云架构与大数据",
+      "language": "ja",
+      "url": "https://rss.itmedia.co.jp/rss/2.0/ait.xml",
+      "official_page": "https://corp.itmedia.co.jp/media/rss_list/",
+      "priority": "high",
+      "enabled": true,
+      "notes": "架构、数据库、云原生、运维和开发"
+    },
+    {
+      "id": "monoist",
+      "name": "MONOist",
+      "category": "制造业科技",
+      "language": "ja",
+      "url": "https://rss.itmedia.co.jp/rss/2.0/monoist.xml",
+      "official_page": "https://corp.itmedia.co.jp/media/rss_list/",
+      "priority": "high",
+      "enabled": true,
+      "notes": "日本制造业、FA、机器人与工业数字化"
+    },
+    {
+      "id": "azure-blog",
+      "name": "Microsoft Azure Blog",
+      "category": "云架构与大数据",
+      "language": "en",
+      "url": "https://azure.microsoft.com/en-us/blog/feed/",
+      "official_page": "https://azure.microsoft.com/en-us/blog/",
+      "priority": "high",
+      "enabled": true,
+      "notes": "Azure 企业云与 AI"
+    },
+    {
+      "id": "aws-news",
+      "name": "AWS News Blog",
+      "category": "云架构与大数据",
+      "language": "en",
+      "url": "https://aws.amazon.com/blogs/aws/feed/",
+      "official_page": "https://aws.amazon.com/blogs/aws/",
+      "priority": "high",
+      "enabled": true,
+      "notes": "AWS 新服务、架构和企业应用"
+    },
+    {
+      "id": "cloudera-blog",
+      "name": "Cloudera Blog",
+      "category": "云架构与大数据",
+      "language": "en",
+      "url": "https://blog.cloudera.com/feed/",
+      "official_page": "https://blog.cloudera.com/",
+      "priority": "high",
+      "enabled": false,
+      "notes": "CDP、混合云数据平台、企业 AI；当前返回网页而非可识别 Feed，暂不启用"
+    },
+    {
+      "id": "databricks-blog",
+      "name": "Databricks Blog",
+      "category": "云架构与大数据",
+      "language": "en",
+      "url": "https://www.databricks.com/feed",
+      "official_page": "https://www.databricks.com/blog",
+      "priority": "high",
+      "enabled": true,
+      "notes": "Lakehouse、数据工程、AI 与分析"
+    },
+    {
+      "id": "confluent-blog",
+      "name": "Confluent Blog",
+      "category": "云架构与大数据",
+      "language": "en",
+      "url": "https://www.confluent.io/blog/feed/",
+      "official_page": "https://www.confluent.io/blog/",
+      "priority": "medium",
+      "enabled": false,
+      "notes": "Kafka、流数据和事件驱动架构；候选来源"
+    },
+    {
+      "id": "jpx-market",
+      "name": "日本交易所市场新闻",
+      "category": "日本股市金融",
+      "language": "ja",
+      "url": "https://www.jpx.co.jp/rss/markets_news.xml",
+      "official_page": "https://www.jpx.co.jp/rss/index.html",
+      "priority": "high",
+      "enabled": true,
+      "notes": "JPX 官方市场公告"
+    },
+    {
+      "id": "boj-news",
+      "name": "日本银行更新",
+      "category": "日本股市金融",
+      "language": "ja",
+      "url": "https://www.boj.or.jp/rss/whatsnew.xml",
+      "official_page": "https://www.boj.or.jp/about/abouthp.htm",
+      "priority": "high",
+      "enabled": true,
+      "notes": "日本货币政策、讲话、报告和统计更新"
+    },
+    {
+      "id": "boj-statistics",
+      "name": "日本银行统计",
+      "category": "日本股市金融",
+      "language": "ja",
+      "url": "https://www.boj.or.jp/rss/statistics.xml",
+      "official_page": "https://www.boj.or.jp/statistics/",
+      "priority": "medium",
+      "enabled": false,
+      "notes": "宏观和金融统计；更新较密，先作为候选"
+    },
+    {
+      "id": "fed-press",
+      "name": "Federal Reserve Press Releases",
+      "category": "全球股市金融",
+      "language": "en",
+      "url": "https://www.federalreserve.gov/feeds/press_all.xml",
+      "official_page": "https://www.federalreserve.gov/feeds/feeds.htm",
+      "priority": "high",
+      "enabled": true,
+      "notes": "美联储政策与监管公告"
+    },
+    {
+      "id": "sec-press",
+      "name": "SEC Press Releases",
+      "category": "全球股市金融",
+      "language": "en",
+      "url": "https://www.sec.gov/news/pressreleases.rss",
+      "official_page": "https://www.sec.gov/about/secrss",
+      "priority": "medium",
+      "enabled": false,
+      "notes": "美国证券监管公告；访问可能要求特定 User-Agent"
+    },
+    {
+      "id": "hacker-news",
+      "name": "Hacker News",
+      "category": "全球科技",
+      "language": "en",
+      "url": "https://hnrss.org/frontpage",
+      "official_page": "https://news.ycombinator.com/",
+      "priority": "medium",
+      "enabled": true,
+      "notes": "前沿技术信号，噪声较高，保留关键词过滤"
+    }
+  ]
+}

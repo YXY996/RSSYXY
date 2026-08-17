@@ -40,6 +40,34 @@
       "max_age_days": 3
     },
     {
+      "id": "itmedia-ai",
+      "name": "ITmedia AI＋",
+      "url": "https://rss.itmedia.co.jp/rss/2.0/aiplus.xml",
+      "enabled": true,
+      "max_age_days": 4
+    },
+    {
+      "id": "itmedia-enterprise",
+      "name": "ITmedia Enterprise",
+      "url": "https://rss.itmedia.co.jp/rss/2.0/enterprise.xml",
+      "enabled": true,
+      "max_age_days": 4
+    },
+    {
+      "id": "atmarkit",
+      "name": "＠IT",
+      "url": "https://rss.itmedia.co.jp/rss/2.0/ait.xml",
+      "enabled": true,
+      "max_age_days": 4
+    },
+    {
+      "id": "monoist",
+      "name": "MONOist",
+      "url": "https://rss.itmedia.co.jp/rss/2.0/monoist.xml",
+      "enabled": true,
+      "max_age_days": 4
+    },
+    {
       "id": "azure-blog",
       "name": "Microsoft Azure Blog",
       "url": "https://azure.microsoft.com/en-us/blog/feed/",
@@ -50,6 +78,34 @@
       "id": "aws-news",
       "name": "AWS News Blog",
       "url": "https://aws.amazon.com/blogs/aws/feed/",
+      "enabled": true,
+      "max_age_days": 7
+    },
+    {
+      "id": "databricks-blog",
+      "name": "Databricks Blog",
+      "url": "https://www.databricks.com/feed",
+      "enabled": true,
+      "max_age_days": 7
+    },
+    {
+      "id": "jpx-market",
+      "name": "日本交易所市场新闻",
+      "url": "https://www.jpx.co.jp/rss/markets_news.xml",
+      "enabled": true,
+      "max_age_days": 5
+    },
+    {
+      "id": "boj-news",
+      "name": "日本银行更新",
+      "url": "https://www.boj.or.jp/rss/whatsnew.xml",
+      "enabled": true,
+      "max_age_days": 7
+    },
+    {
+      "id": "fed-press",
+      "name": "Federal Reserve Press Releases",
+      "url": "https://www.federalreserve.gov/feeds/press_all.xml",
       "enabled": true,
       "max_age_days": 7
     },

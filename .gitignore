@@ -1,0 +1,10 @@
+__pycache__/
+*.py[cod]
+output/local-preview/
+output/enriched/
+.venv/
+output/html/
+output/rss/
+output/index.html
+output/news/*.db
+output/daily-refresh.log
