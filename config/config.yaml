@@ -162,13 +162,13 @@ report:
                                       # keyword = 按关键词分组显示
                                       # platform = 按平台/来源分组显示
 
-  sort_by_position_first: false       # 关键词模式排序（仅 display_mode=keyword 时生效）
+  sort_by_position_first: true        # 按个人工作优先级展示，避免被社会热点数量挤占
                                       # true = 按 frequency_words.txt 的定义顺序
                                       # false = 按匹配到的热点条数排序（多的在前）
 
   rank_threshold: 5                   # 排名高亮阈值（影响展示强调，不改变抓取范围）
 
-  max_news_per_keyword: 0             # 每个关键词/标签最大显示数量（0=不限制，仅影响展示裁剪）
+  max_news_per_keyword: 8             # 每个主题最多 8 条，控制首页信息密度
 
 
 # ===============================================================

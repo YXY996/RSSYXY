@@ -221,6 +221,11 @@ def generate_html_report(
         # 默认简单 HTML
         html_content = f"<html><body><h1>Report</h1><pre>{report_data}</pre></body></html>"
 
+    # Keep personalization as a post-render layer so upstream renderer updates
+    # remain easy to merge.
+    from trendradar.report.personal_dashboard import personalize_html
+    html_content = personalize_html(html_content)
+
     # 1. 保存时间戳快照（历史记录）
     with open(snapshot_file, "w", encoding="utf-8") as f:
         f.write(html_content)

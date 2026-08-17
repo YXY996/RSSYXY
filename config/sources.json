@@ -1,0 +1,64 @@
+{
+  "platforms": [
+    {
+      "id": "wallstreetcn-hot",
+      "name": "华尔街见闻",
+      "expected_domain": "wallstreetcn.com",
+      "enabled": true
+    },
+    {
+      "id": "cls-hot",
+      "name": "财联社热门",
+      "expected_domain": "cls.cn",
+      "enabled": true
+    },
+    {
+      "id": "zhihu",
+      "name": "知乎",
+      "expected_domain": "zhihu.com",
+      "enabled": true
+    },
+    {
+      "id": "thepaper",
+      "name": "澎湃新闻",
+      "expected_domain": "thepaper.cn",
+      "enabled": true
+    },
+    {
+      "id": "toutiao",
+      "name": "今日头条",
+      "expected_domain": "toutiao.com",
+      "enabled": true
+    }
+  ],
+  "rss": [
+    {
+      "id": "publickey-jp",
+      "name": "Publickey 日本 IT",
+      "url": "https://www.publickey1.jp/atom.xml",
+      "enabled": true,
+      "max_age_days": 3
+    },
+    {
+      "id": "azure-blog",
+      "name": "Microsoft Azure Blog",
+      "url": "https://azure.microsoft.com/en-us/blog/feed/",
+      "enabled": true,
+      "max_age_days": 7
+    },
+    {
+      "id": "aws-news",
+      "name": "AWS News Blog",
+      "url": "https://aws.amazon.com/blogs/aws/feed/",
+      "enabled": true,
+      "max_age_days": 7
+    },
+    {
+      "id": "hacker-news",
+      "name": "Hacker News",
+      "url": "https://hnrss.org/frontpage",
+      "enabled": true,
+      "max_age_days": 2
+    }
+  ]
+}
