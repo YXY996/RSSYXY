@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-19T00:18:04+0900",
+  "updated_at": "2026-08-19T01:17:43+0900",
   "articles": {
     "https://monoist.itmedia.co.jp/mn/articles/2608/14/news005.html": {
       "article_id": "ca3126d542a4ef66",
@@ -602,6 +602,25 @@
       "reading_text": "Spirit 航空公司作为美国低成本航空运营商，在 2020 年 COVID-19 疫情爆发后陷入财务困境，持续亏损直至 2026 年 5 月宣布永久停飞，并进入破产清算程序。为筹集资金偿还债务，清算方对 Spirit 的资产进行公开拍卖，其中一项重要资产是该公司积累的企业数据。Google 参与竞标并以 1000 万美元成功购得这批数据，竞标对手包括 AI 训练数据提供商 Mercor，显示出科技公司对高质量训练数据的强烈需求。\n\n这批数据规模庞大，涵盖 Spirit 运营的多个方面。电子邮件数据超过 1 亿封，Microsoft Teams 交互数据达 5 亿项，OneDrive 文件有 1700 万份，SharePoint 项目超过 2050 万项。此外，还包括 3000 多万条客服通话录音、1500 多万条客服聊天记录，以及 ServiceNow 工单 60 万份、Oracle Responsys 营销应用的 1370 万活跃电子邮件地址、1100 万份机上 Wi-Fi 服务销售记录。运营数据方面，有 76.3 万次航班记录、500 万次机组配对、120 多万张燃油单据，以及 78.7 万份零件采购记录。\n\nGoogle 声称购买这些数据的主要目的是改进其 AI 服务，特别是训练特定领域的小型语言模型。近年来，AI 专家逐渐认为大型语言模型在某些应用场景中过于笨重，而针对特定行业如航空运营的小型模型更具实用性和效率。Spirit 的数据提供了丰富的航空运营和商业记录，可能成为训练此类模型的基础。例如，航班数据可用于优化调度预测，客服记录可用于提升客户服务 AI 的交互能力。\n\n然而，数据隐私问题引发关注。尽管数据在拍卖前已进行去标识化处理，Google 仍承诺对获取的数据进行额外清洗，彻底移除任何可识别的个人身份信息。这一措施旨在符合数据保护法规，避免潜在泄露风险。尽管如此，The Register 报道指出，未来仍可能出现因数据残留导致的隐私漏洞，这考验着企业的数据管理能力。\n\n从影响来看，此交易反映了 AI 行业对高质量、特定领域数据的渴求，尤其是在企业破产清算场景中，数据作为独立资产的价值日益凸显。同时，它突显了云架构和数据平台在存储、迁移及处理大规模数据集中的关键作用。对于金融判断而言，此类收购提供了新的投资视角，数据资产可能成为企业估值的重要组成部分。限制方面，数据的去标识化效果、AI 模型的实际应用效果，以及跨行业数据复用的合规性，都是需要持续评估的因素。",
       "why_it_matters": "此事件对日本市场、企业 IT、制造业、数据平台、云架构和金融判断具有多重价值。在日本市场，航空业和制造业同样面临数字化转型压力，Google 的收购显示数据作为战略资产的重要性，可推动本土企业重视数据治理与 AI 应用。对企业 IT 而言，它突显了在并购或破产清算中评估数据资产价值的必要性，优化数据迁移与云存储策略。制造业中，类似运营数据可用于预测性维护和供应链优化。数据平台",
       "generated_by": "local-litellm/9router-free-auto"
+    },
+    "https://www.databricks.com/blog/how-databricks-feature-store-serves-features-sub-second-freshness": {
+      "article_id": "fb683174ce4352be",
+      "source": "databricks.com",
+      "original_title": "How Databricks Feature Store serves features with sub-second freshness",
+      "original_url": "https://www.databricks.com/blog/how-databricks-feature-store-serves-features-sub-second-freshness",
+      "zh_title": "Databricks Feature Store 如何以亚秒级新鲜度提供特征",
+      "summary": "Databricks Feature Store 可将 Kafka 流式聚合以 200ms p99 延迟写入在线特征库，把滞后从分钟或小时压到毫秒。Spark Real-Time Mode 按行更新滚动窗口，Lakebase 降低高频小 upsert 写放大，Model Serving 推理时低延迟取数。同一特征定义同时驱动离线批处理与在线管道，减少自建流式基础设施负担。",
+      "key_points": [
+        "从 Kafka 事件到达至在线特征库可用，端到端 p99 延迟为 200ms。",
+        "Spark Real-Time Mode（RTM）并发执行阶段、按行更新聚合，替代微批模式常见的秒到分钟级延迟。",
+        "RollingWindow 以事件时间戳为基准、毫秒级向后回看；另支持 Tumbling 与 Sliding 窗口。",
+        "状态保存在 executor 本地 RocksDB，窗口过期按行剔除贡献；故障最多从 Kafka 重放 5 分钟，仍保持 exactly-once。",
+        "Lakebase 计算与存储分离以降低高频小 upsert 写放大；管道运行于 serverless Lakeflow Spark Delta Pipelines。",
+        "同一特征定义同时驱动离线批处理与在线流式管道，并由 Model Serving 在推理时自动取数。"
+      ],
+      "reading_text": "机器学习模型的效果取决于信号新鲜度。反欺诈必须在用户按下购买后的毫秒内决策，这依赖于能否看到数秒前的可疑交易：过去 30 天的平均交易刻画正常基线，最近 10 分钟总额则暴露当下异常。个性化同样依赖最新意图。Spark 批处理适合在 Lakehouse 计算历史基线，但定时作业会带来数分钟到数小时滞后；一旦需要秒级或毫秒级新鲜特征，现有特征平台往往不够用，数据科学家不得不自写流式聚合并搭建托管基础设施。\n\nDatabricks Feature Store 让特征只定义一次、同时用于大规模离线批处理和高度新鲜的在线管道，并编排 Spark Real-Time Mode（RTM）、Lakebase 与 Model Serving。端到端路径为：事件进入 Kafka（信用卡交易、广告曝光、点击流等）→ serverless Lakeflow Spark Delta Pipelines 上的 Spark RTM 持续计算滚动聚合 → 经流式 JDBC sink 写入 Lakebase 在线特征库 → Model Serving 在推理时自动取最新特征。公开指标是从 Kafka 到达至在线库可用的 p99 延迟 200ms。以近 10 分钟交易金额之和为例，管道用本地 RocksDB 维护带过期时间的累计值，按事件递增后写入 Lakebase，审批时可与历史购买基线对照。\n\nFeature Store 支持三类时间窗口。Tumbling windows 对齐墙钟、区间不重叠，只在边界产出，新鲜度受限；Sliding windows 对齐墙钟但允许重叠；Rolling windows 从每个事件时间戳以毫秒分辨率向后回看，随新事件立即更新，最适合实时服务。变化不频繁的特征可用前两类以降低更新成本。声明式 API 可用 StreamSource、entity_columns、timeseries_column 以及 Sum 配 RollingWindow 直接定义。\n\n传统微批模式（MBM）按批收集、顺序过阶段再检查点，有状态聚合多为秒到分钟级。RTM 让阶段并发，聚合算子有行即处理：先做校验、合并与形态转换，再按实体更新滚动窗口，每行立刻改 RocksDB 并下发新值，窗口过期也按行剔除贡献。RocksDB 在 executor 本地，状态可超过集群内存。检查点成本被摊销到更长间隔，而非每个微批边界阻塞；仍保持 exactly-once，故障最多从 Kafka 重放 5 分钟数据。管道跑在 serverless SDP 上，无需自管集群或容量规划；重启时新集群就绪后再切，交接对齐 5 分钟检查点。Lakebase 计算与存储分离，降低高频小 upsert 的写放大。原文后半关于流式之外能力、训练数据与集成的章节在所供文本中被截断，且未给出吞吐上限或跨产品基准，落地仍需按自身 SLA 与数据量验证。",
+      "why_it_matters": "亚秒级特征新鲜度直接关系到日本及亚太金融风控、零售实时推荐和制造现场异常检测的决策窗口。将 Kafka、Spark RTM、Lakebase 与 Model Serving 收进同一 Lakehouse 定义，可减少自建流式特征栈的碎片化，便于企业 IT 评估云上有状态流的延迟、检查点与运维成本，并判断 Databricks 对实时 ML 平台的替代价值。",
+      "generated_by": "local-litellm/omni-reasoning"
     }
   }
 }
