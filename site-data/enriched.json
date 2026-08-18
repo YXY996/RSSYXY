@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-19T01:17:43+0900",
+  "updated_at": "2026-08-19T01:21:37+0900",
   "articles": {
     "https://monoist.itmedia.co.jp/mn/articles/2608/14/news005.html": {
       "article_id": "ca3126d542a4ef66",
@@ -620,6 +620,25 @@
       ],
       "reading_text": "机器学习模型的效果取决于信号新鲜度。反欺诈必须在用户按下购买后的毫秒内决策，这依赖于能否看到数秒前的可疑交易：过去 30 天的平均交易刻画正常基线，最近 10 分钟总额则暴露当下异常。个性化同样依赖最新意图。Spark 批处理适合在 Lakehouse 计算历史基线，但定时作业会带来数分钟到数小时滞后；一旦需要秒级或毫秒级新鲜特征，现有特征平台往往不够用，数据科学家不得不自写流式聚合并搭建托管基础设施。\n\nDatabricks Feature Store 让特征只定义一次、同时用于大规模离线批处理和高度新鲜的在线管道，并编排 Spark Real-Time Mode（RTM）、Lakebase 与 Model Serving。端到端路径为：事件进入 Kafka（信用卡交易、广告曝光、点击流等）→ serverless Lakeflow Spark Delta Pipelines 上的 Spark RTM 持续计算滚动聚合 → 经流式 JDBC sink 写入 Lakebase 在线特征库 → Model Serving 在推理时自动取最新特征。公开指标是从 Kafka 到达至在线库可用的 p99 延迟 200ms。以近 10 分钟交易金额之和为例，管道用本地 RocksDB 维护带过期时间的累计值，按事件递增后写入 Lakebase，审批时可与历史购买基线对照。\n\nFeature Store 支持三类时间窗口。Tumbling windows 对齐墙钟、区间不重叠，只在边界产出，新鲜度受限；Sliding windows 对齐墙钟但允许重叠；Rolling windows 从每个事件时间戳以毫秒分辨率向后回看，随新事件立即更新，最适合实时服务。变化不频繁的特征可用前两类以降低更新成本。声明式 API 可用 StreamSource、entity_columns、timeseries_column 以及 Sum 配 RollingWindow 直接定义。\n\n传统微批模式（MBM）按批收集、顺序过阶段再检查点，有状态聚合多为秒到分钟级。RTM 让阶段并发，聚合算子有行即处理：先做校验、合并与形态转换，再按实体更新滚动窗口，每行立刻改 RocksDB 并下发新值，窗口过期也按行剔除贡献。RocksDB 在 executor 本地，状态可超过集群内存。检查点成本被摊销到更长间隔，而非每个微批边界阻塞；仍保持 exactly-once，故障最多从 Kafka 重放 5 分钟数据。管道跑在 serverless SDP 上，无需自管集群或容量规划；重启时新集群就绪后再切，交接对齐 5 分钟检查点。Lakebase 计算与存储分离，降低高频小 upsert 的写放大。原文后半关于流式之外能力、训练数据与集成的章节在所供文本中被截断，且未给出吞吐上限或跨产品基准，落地仍需按自身 SLA 与数据量验证。",
       "why_it_matters": "亚秒级特征新鲜度直接关系到日本及亚太金融风控、零售实时推荐和制造现场异常检测的决策窗口。将 Kafka、Spark RTM、Lakebase 与 Model Serving 收进同一 Lakehouse 定义，可减少自建流式特征栈的碎片化，便于企业 IT 评估云上有状态流的延迟、检查点与运维成本，并判断 Databricks 对实时 ML 平台的替代价值。",
+      "generated_by": "local-litellm/omni-reasoning"
+    },
+    "https://atmarkit.itmedia.co.jp/ait/articles/2608/18/news039.html": {
+      "article_id": "e0036b6de3155ae9",
+      "source": "atmarkit.itmedia.co.jp",
+      "original_title": "Microsoft Entra ID、パスキーをデフォルトの認証に SMS・音声認証は廃止",
+      "original_url": "https://atmarkit.itmedia.co.jp/ait/articles/2608/18/news039.html",
+      "zh_title": "Microsoft Entra ID 将 passkey 设为默认认证，SMS 与语音 MFA 将于 2027 年 2 月强制废除",
+      "summary": "微软于2026年7月宣布，将 Entra ID 默认登录改为 passkey，并于2027年2月1日停用其 SMS 与语音 MFA。9月1日起相关用户自动进入注册，到期后不可跳过。已用 Windows Hello for Business 或 FIDO2 者不受影响。过渡期可用 Graph API 暂缓，但强制日不可豁免。该安排仅覆盖公共云。",
+      "key_points": [
+        "微软于2026年7月13日（美国时间）宣布，Microsoft Entra ID 将把 passkey 设为默认登录方式，以推进抗钓鱼认证。",
+        "微软认定其自有 SMS 与语音 MFA 在现有方法中抗钓鱼和账户盗用能力最低，并将于2027年2月1日彻底停用。",
+        "2026年9月1日起，启用微软 SMS 或语音 MFA 的用户自动成为 passkey 注册对象；2027年2月1日后仅剩该类方法的用户登录时必须注册且不可跳过。",
+        "强制迁移对全部租户一律适用、不可退出；已使用 Windows Hello for Business 或 FIDO2 的用户不受影响。",
+        "2026年9月1日至2027年2月1日过渡期内，可用 Microsoft Graph API 将 passkeyDynamicMigration 设为 true 暂时推迟自动迁移，到期后仍强制执行。",
+        "若监管或运营仍需短信语音，须经 Microsoft Security Store 另行签约通信服务商并按条计费；迁到 passkey 本身不产生额外费用，且停用覆盖 SSPR。"
+      ],
+      "reading_text": "微软于2026年7月13日（美国时间）宣布，Microsoft Entra ID 将把 passkey 设为默认登录方式，并淘汰其自行提供的 SMS 与语音多要素认证。此举是为了把抗钓鱼认证变成所有组织的既定能力。微软指出，在当前可用方法中，SMS 与语音对钓鱼攻击和账户盗用的抵抗力最低，因此不再适合作为默认或长期依赖的第二因素。\n\npasskey 采用与设备或同步凭据存储绑定的公钥密码。密钥对与正在访问的域名绑定，钓鱼站点无法完成有效认证，从而从机制上切断仿冒登录页窃取凭据的路径。每次认证都对一次性挑战值签名验证，对通信拦截后的重放攻击也有很高抵抗力。微软希望租户无需额外选择，即可默认获得更高认证强度。\n\n时间表已经锁定。2026年9月1日起，凡启用微软提供的 SMS 或语音 MFA 的用户，将自动成为 passkey 注册对象，并在完成 MFA 登录时被提示注册。2027年2月1日，微软自有 SMS 与语音投递服务彻底停用。同日之后，若用户可用的 MFA 方法只剩 SMS 或语音，登录时必须注册 passkey 且不可跳过。强制执行对全部租户一律适用，没有退出选项。已经使用 Windows Hello for Business 或 FIDO2 等其他抗钓鱼方法的用户，不受此次停用影响。\n\n在2026年9月1日至2027年2月1日的过渡期内，租户可通过 Microsoft Graph API 暂时推迟自动启用。调用需具备 Policy.ReadWrite.AuthenticationMethod 权限，对 authenticationmethodspolicy 发送 PATCH，将 optOutSettings 中的 passkeyDynamicMigration 设为 true。该设置仅使租户在过渡期内不进入自动迁移；2027年2月1日之后无论是否设置，都将进入统一强制时间表。推迟是为了给电信合同调整以及其他认证方法落地留出时间，并非永久豁免。\n\n微软给出四步落地路径：以全局读取者、认证策略管理员或安全读取者角色运行官方 PowerShell 脚本 entra-sms-voice-usage-analyzer，盘点仍启用 SMS 或语音的用户，结果非零即表示2027年2月后存在登录中断风险；在 Microsoft Entra 管理中心将 Registration campaign 状态设为 Microsoft Managed，并把目标安全组纳入注册活动；对监管或运营上仍必须使用 SMS 的用户，评估 Microsoft Security Store 中的通信服务商并单独签约；按认知、行动、提醒三个阶段向用户说明变更和操作方法。\n\n注册活动开启后，用户会在下一次完成 MFA 时被要求注册 passkey。默认情况下用户可以无限次推迟，因此若希望赶在2026年9月1日前压低对短信语音的依赖，应提前修改相关配置。Security Store 中通信服务商的确认窗口计划为2026年9月18日，实际选择与签约计划为2026年10月30日。从微软自有通道迁到 passkey 不产生额外费用，经 Store 使用第三方通信则按消息计费。此次停用覆盖 Entra 整体，包括自助密码重置 SSPR；SSPR 用户若仍需短信或语音，同样可走 Store。微软还计划为已采用无密码认证的用户另行提供密码变更支持。上述时间表仅适用于公共云，其他云环境将另行通知。",
+      "why_it_matters": "日本企业普遍以 Entra ID 作为身份中枢，制造现场远程运维、供应链门户和财务审批仍大量使用短信 MFA。2027年2月强制停用可能造成生产与资金流程中断。应立即盘点受影响账号、推进 passkey 或 FIDO2，并将 Security Store 备援费用纳入 IT 预算。",
       "generated_by": "local-litellm/omni-reasoning"
     }
   }
