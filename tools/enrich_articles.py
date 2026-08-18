@@ -20,7 +20,7 @@ PUBLIC_CACHE = ROOT / "site-data/enriched.json"
 PRIVATE_CACHE = ROOT / "output/enriched/private.json"
 LOCAL_PREVIEW = ROOT / "output/local-preview/index.html"
 LITELLM_URL = os.environ.get("RSSYXY_LITELLM_URL", "http://127.0.0.1:20130")
-MODEL = os.environ.get("RSSYXY_LITELLM_MODEL", "gateway-auto")
+MODEL = os.environ.get("RSSYXY_LITELLM_MODEL", "9router-free-auto")
 LIMIT = int(os.environ.get("RSSYXY_AI_LIMIT", "8"))
 
 
@@ -83,7 +83,23 @@ def generate_chinese(item: dict, readable: str, key: str) -> dict:
         timeout=180,
     )
     response.raise_for_status()
-    content = response.json()["choices"][0]["message"]["content"].strip()
+    raw = response.json()
+    content = (raw.get("choices") or [{}])[0].get("message", {}).get("content", "").strip()
+    if not content:
+        # retry once with the fast model as fallback
+        import os
+        alt = os.environ.get("RSSYXY_LITELLM_MODEL_ALT", "9router-free-fast")
+        if alt and alt != MODEL:
+            response = requests.post(
+                f"{LITELLM_URL}/v1/chat/completions",
+                headers={"Authorization": f"Bearer {key}", "Content-Type": "application/json"},
+                json={"model": alt, "messages": [{"role": "system", "content": "只输出合法 JSON，使用简体中文。"}, {"role": "user", "content": prompt}], "temperature": 0.2, "max_tokens": 2400},
+                timeout=180,
+            )
+            response.raise_for_status()
+            content = (response.json().get("choices") or [{}])[0].get("message", {}).get("content", "").strip()
+    if not content:
+        raise ValueError(f"模型返回空内容: model={MODEL}, finish={raw.get('choices') and raw['choices'][0].get('finish_reason')}, usage={raw.get('usage')}")
     content = re.sub(r"^```(?:json)?\s*|\s*```$", "", content, flags=re.DOTALL)
     try:
         return json.loads(content)
@@ -124,6 +140,8 @@ def main() -> None:
             print(f"[{index}/{len(pending)}] 生成中文阅读稿: {item['title'][:46]}")
             readable = fetch_readable(item["url"])
             enriched = generate_chinese(item, readable, key)
+            if not isinstance(enriched, dict):
+                raise ValueError(f"模型返回非对象 JSON: {type(enriched).__name__}")
             if not enriched.get("zh_title") or len(enriched.get("reading_text", "")) < 200:
                 raise ValueError("模型未返回完整中文阅读稿")
             article_id = hashlib.sha256(item["url"].encode()).hexdigest()[:16]

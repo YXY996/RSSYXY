@@ -184,7 +184,7 @@ ai:
   num_retries: 1
   fallback_models: []
 ai_analysis:
-  enabled: false
+  enabled: true
   language: Chinese
   prompt_file: ai_analysis_prompt.txt
   mode: follow_report

@@ -1776,7 +1776,7 @@ def render_html_content(
                 </div>"""
 
     # 生成 RSS 统计内容
-    def render_rss_stats_html(stats: List[Dict], title: str = "RSS 订阅更新") -> str:
+    def render_rss_stats_html(stats: List[Dict], title: str = "RSS 订阅更新", exclude_new: bool = False) -> str:
         """渲染 RSS 统计区块 HTML
 
         Args:
@@ -1797,12 +1797,22 @@ def render_html_content(
                     }
                 ]
             title: 区块标题
+            exclude_new: 是否排除 is_new=True 的条目（用于避免与 RSS 新增更新区块重复）
 
         Returns:
             渲染后的 HTML 字符串
         """
         if not stats:
             return ""
+
+        # 如果排除新增，过滤掉 is_new=True 的条目
+        if exclude_new:
+            filtered_stats = []
+            for stat in stats:
+                filtered_titles = [t for t in stat.get("titles", []) if not t.get("is_new", False)]
+                if filtered_titles:
+                    filtered_stats.append({**stat, "titles": filtered_titles, "count": len(filtered_titles)})
+            stats = filtered_stats
 
         # 计算总条目数
         total_count = sum(stat.get("count", 0) for stat in stats)
@@ -1877,7 +1887,7 @@ def render_html_content(
         return rss_html
 
     # 生成独立展示区内容
-    def render_standalone_html(data: Optional[Dict]) -> str:
+    def render_standalone_html(data: Optional[Dict], has_rss_items: bool = False) -> str:
         """渲染独立展示区 HTML（复用热点词汇统计区样式）
 
         Args:
@@ -2065,7 +2075,7 @@ def render_html_content(
         # 渲染 RSS 源（复用相同结构） - 仅在没有单独的 rss_items 时渲染，避免重复
         # 注意：如果外部已经传入了 rss_items 参数，则跳过这里的 rss_feeds 渲染
         # 因为 rss_items 会通过 render_rss_stats_html 单独渲染
-        render_rss_in_standalone = not rss_items  # 如果有 rss_items，说明外部会单独渲染，这里就不重复了
+        render_rss_in_standalone = not has_rss_items  # 如果有 rss_items，说明外部会单独渲染，这里就不重复了
 
         if render_rss_in_standalone:
             for feed in rss_feeds:
@@ -2137,11 +2147,12 @@ def render_html_content(
         return standalone_html
 
     # 生成 RSS 统计和新增 HTML
-    rss_stats_html = render_rss_stats_html(rss_items, "RSS 订阅更新") if rss_items else ""
+    # 避免重复：RSS 订阅更新只显示非新增条目，RSS 新增更新只显示新增条目
+    rss_stats_html = render_rss_stats_html(rss_items, "RSS 订阅更新", exclude_new=True) if rss_items else ""
     rss_new_html = render_rss_stats_html(rss_new_items, "RSS 新增更新") if rss_new_items else ""
 
-    # 生成独立展示区 HTML
-    standalone_html = render_standalone_html(standalone_data)
+    # 生成独立展示区 HTML（传入 rss_items 标志避免重复渲染）
+    standalone_html = render_standalone_html(standalone_data, bool(rss_items))
 
     # 生成 AI 分析 HTML
     ai_html = render_ai_analysis_html_rich(ai_analysis) if ai_analysis else ""
