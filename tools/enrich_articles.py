@@ -96,8 +96,10 @@ def inject_cache(path: Path, articles: dict) -> None:
         return
     report_html = path.read_text(encoding="utf-8")
     report_html = re.sub(r'<script id="wisdom-enriched-data" type="application/json">.*?</script>', "", report_html, flags=re.DOTALL)
-    safe_json = json.dumps(articles, ensure_ascii=False).replace("</", "<\\/")
-    block = f'<script id="wisdom-enriched-data" type="application/json">{safe_json}</script>'
+    # Use json.dumps with ensure_ascii=False and compact separators
+    # No HTML escaping needed - the browser's JSON.parse handles the content correctly
+    payload = json.dumps(articles, ensure_ascii=False, separators=(",", ":"))
+    block = f'<script id="wisdom-enriched-data" type="application/json">{payload}</script>'
     path.write_text(report_html.replace("</body>", f"{block}\n</body>", 1), encoding="utf-8")
 
 

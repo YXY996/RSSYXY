@@ -2062,69 +2062,74 @@ def render_html_content(
                     </div>"""
             group_idx += 1
 
-        # 渲染 RSS 源（复用相同结构）
-        for feed in rss_feeds:
-            feed_name = feed.get("name", feed.get("id", ""))
-            items = feed.get("items", [])
-            if not items:
-                continue
+        # 渲染 RSS 源（复用相同结构） - 仅在没有单独的 rss_items 时渲染，避免重复
+        # 注意：如果外部已经传入了 rss_items 参数，则跳过这里的 rss_feeds 渲染
+        # 因为 rss_items 会通过 render_rss_stats_html 单独渲染
+        render_rss_in_standalone = not rss_items  # 如果有 rss_items，说明外部会单独渲染，这里就不重复了
 
-            standalone_html += f"""
+        if render_rss_in_standalone:
+            for feed in rss_feeds:
+                feed_name = feed.get("name", feed.get("id", ""))
+                items = feed.get("items", [])
+                if not items:
+                    continue
+
+                standalone_html += f"""
                     <div class="standalone-group" data-standalone-tab="{group_idx}">
                         <div class="standalone-header">
                             <div class="standalone-name">{html_escape(feed_name)}</div>
                             <div class="standalone-count">{len(items)} 条</div>
                         </div>"""
 
-            for j, item in enumerate(items, 1):
-                title = item.get("title", "")
-                url = item.get("url", "")
-                published_at = item.get("published_at", "")
-                author = item.get("author", "")
+                for j, item in enumerate(items, 1):
+                    title = item.get("title", "")
+                    url = item.get("url", "")
+                    published_at = item.get("published_at", "")
+                    author = item.get("author", "")
 
-                standalone_html += f"""
+                    standalone_html += f"""
                         <div class="news-item">
                             <div class="news-number">{j}</div>
                             <div class="news-content">
                                 <div class="news-header">"""
 
-                # 时间显示（格式化 ISO 时间）
-                if published_at:
-                    try:
-                        from datetime import datetime as dt
-                        if "T" in published_at:
-                            dt_obj = dt.fromisoformat(published_at.replace("Z", "+00:00"))
-                            time_display = dt_obj.strftime("%m-%d %H:%M")
-                        else:
+                    # 时间显示（格式化 ISO 时间）
+                    if published_at:
+                        try:
+                            from datetime import datetime as dt
+                            if "T" in published_at:
+                                dt_obj = dt.fromisoformat(published_at.replace("Z", "+00:00"))
+                                time_display = dt_obj.strftime("%m-%d %H:%M")
+                            else:
+                                time_display = published_at
+                        except:
                             time_display = published_at
-                    except:
-                        time_display = published_at
 
-                    standalone_html += f'<span class="time-info">{html_escape(time_display)}</span>'
+                        standalone_html += f'<span class="time-info">{html_escape(time_display)}</span>'
 
-                # 作者显示
-                if author:
-                    standalone_html += f'<span class="source-name">{html_escape(author)}</span>'
+                    # 作者显示
+                    if author:
+                        standalone_html += f'<span class="source-name">{html_escape(author)}</span>'
 
-                standalone_html += """
+                    standalone_html += """
                                 </div>
                                 <div class="news-title">"""
 
-                escaped_title = html_escape(title)
-                if url:
-                    escaped_url = html_escape(url)
-                    standalone_html += f'<a href="{escaped_url}" target="_blank" class="news-link">{escaped_title}</a>'
-                else:
-                    standalone_html += escaped_title
+                    escaped_title = html_escape(title)
+                    if url:
+                        escaped_url = html_escape(url)
+                        standalone_html += f'<a href="{escaped_url}" target="_blank" class="news-link">{escaped_title}</a>'
+                    else:
+                        standalone_html += escaped_title
 
-                standalone_html += """
+                    standalone_html += """
                                 </div>
                             </div>
                         </div>"""
 
-            standalone_html += """
+                standalone_html += """
                     </div>"""
-            group_idx += 1
+                group_idx += 1
 
         standalone_html += """
                     </div>
