@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-18T22:53:49+0900",
+  "updated_at": "2026-08-18T23:08:24+0900",
   "articles": {
     "https://monoist.itmedia.co.jp/mn/articles/2608/14/news005.html": {
       "article_id": "ca3126d542a4ef66",
@@ -488,6 +488,25 @@
       ],
       "reading_text": "2026年8月18日，＠IT报道了Google发布Web AI运行时LiteRT.js的消息。该产品于2026年7月9日（美国时间）正式公布，定位为Google端侧推理库LiteRT的JavaScript绑定，目标是在生产环境的Web应用中直接运行机器学习与AI模型。LiteRT本身是TensorFlow Lite的继任者，2024年更名，背景是它已从TensorFlow框架扩展到PyTorch、JAX、Keras等多个框架，名称变更反映了多框架支持的进展。LiteRT据称运行在数十亿台设备上。\n\nLiteRT.js的核心价值在于，它让开发者用JavaScript或TypeScript把模型集成进应用，在客户端完成文本生成、物体检测、语音处理等任务。由于模型在本地执行，用户隐私得到增强，服务器成本被消除，同时能支撑实时交互所需的超低延迟。Google将其视为TensorFlow.js的强进化版，因为传统Web AI方案依赖性能较弱的JavaScript内核，而LiteRT.js通过WebAssembly把Google原生跨平台运行时及其优化直接提供给Web开发者。\n\n硬件加速是主要卖点。CPU后端使用Google的XNNPACK库，提供多线程支持和relaxed SIMD构建；GPU后端采用ML Drift，通过WebGPU API加速；NPU后端则利用新的WebNN API，目前Chrome和Edge中处于实验阶段，可面向专用NPU实现高能效、超低延迟推理。官方给出的数据是，相比标准CPU执行，推理速度可提升5至60倍。此外，LiteRT.js支持直接解析TensorFlow.js张量作为输入输出，因此能快速集成到现有TensorFlow.js架构中。\n\n工具链方面，Python库LiteRT Torch可一键转换PyTorch模型，使其立即用于浏览器端硬件加速；AI Edge Quantizer允许按层定制量化方案，在保持整体模型质量的同时显著减小体积、提升性能。初期发布包括新的npm包和演示集合，方便开发者上手。\n\n不过，报道也隐含一些限制。WebNN API仍处于实验阶段，NPU加速的可用性取决于浏览器支持；LiteRT.js属于初期版本，生态和文档有待完善；5至60",
       "why_it_matters": "",
+      "generated_by": "local-litellm/9router-free-auto"
+    },
+    "https://atmarkit.itmedia.co.jp/ait/articles/2608/18/news043.html": {
+      "article_id": "a4760c78ade950e3",
+      "source": "atmarkit.itmedia.co.jp",
+      "original_title": "医療サイトを乗っ取り「賭博サイト」へ 攻撃者が狙ったGoogle検索の“信用”",
+      "original_url": "https://atmarkit.itmedia.co.jp/ait/articles/2608/18/news043.html",
+      "zh_title": "医疗网站被劫持跳转赌博页面：攻击者盯上的竟是Google搜索“信用”",
+      "summary": "医疗领域初创企业Medi Face于2026年8月14日宣布，已完成为医疗法人凤应会集团旗下医疗网站遭遇的网络安全攻击进行数字取证分析和证据保全。攻击于8月12日19时33分27秒被检测到，此后仍断续持续。攻击者通过PHP Web shell侵入，夺取Google Search Console（GSC）所有权，并利用Cloudflare Pages搭建伪装网站，将访问者诱导至非法赌博站点。攻击采用基于访问来源、IP地址和终端类型的cloaking技术，使患者看到正常页面，同时向其他访问者展示恶意内容。Medi Face分析认为，此次攻击并非无差别扫描或勒索软件，而是滥用医疗域名在搜索引擎中的评价和信用。",
+      "key_points": [
+        "Medi Face于2026年8月14日公布，医疗法人凤应会集团Web基础设施攻击的取证分析和证据保全已完成，攻击于8月12日19:33:27被检测。",
+        "攻击起点为PHP Web shell直接启动，涉及fgh.php、yomanx498.php等文件，攻击者夺取Google Search Console所有权并利用Cloudflare Pages创建medi-face、fraise-clinic等伪造网站。",
+        "攻击使用cloaking技术：从印度尼西亚移动端访问时显示赌博网站，从日本IP或PC访问时转入无害循环，以规避调查。",
+        "攻击基础设施被确认为5层结构，Medi Face已公开cloaking引擎代码分析结果和IoC等技术资料。",
+        "攻击者删除Web shell和木马文件以掩盖痕迹，Medi Face通过22万3701行服务器访问日志和文件系统元数据追踪到东京都内分配的IP地址。",
+        "分析显示攻击准备可能超过120天，攻击者通过Telegram私密频道通信，Medi Face正准备刑事控告并呼吁警惕类似攻击瞄准日本及亚洲医疗和企业。"
+      ],
+      "reading_text": "2026年8月14日，医疗领域初创企业Medi Face发布公告，宣布已就医疗法人凤应会集团旗下发生的Web基础设施网络攻击完成数字取证分析和证据保全。该攻击于2026年8月12日晚上7点33分27秒被检测到，且此后仍呈断续持续状态。公告显示，此次攻击并未停留在简单篡改页面，而是有计划地利用医疗机构域名的既有信任体系，将访问者最终导向非法赌博网站，构成一种新型的搜索信用滥用攻击。\n\n攻击的起点是PHP语言编写的Web shell被直接启动。Medi Face在分析中发现fgh.php、yomanx498.php等PHP文件被当作Web shell或后门使用。攻击者经由印度尼西亚等多个海外IP地址渗透进Web基础设施，随后成功夺取了Google Search Console（GSC）的所有权。通过获得GSC控制权，攻击者可以在搜索引擎侧操作该医疗域名的索引和展示状态，这为后续滥用域名搜索信用奠定了基础。\n\n进一步调查显示，攻击者还利用Cloudflare Pages的免费服务，创建了挂着medi-face、fraise-clinic等名称的伪造Web站点，并确认其中包含AMP格式页面。这些伪造站点与正被劫持的医疗域名相互配合，构建了一个完整的恶意跳转网络。Medi Face指出，此次攻击明显区别于无差别的脆弱性扫描或纯金钱驱动的勒索软件攻击，核心意图是借助医疗域名在Google搜索结果中长期积累的评级和信用，为非法赌博网站导流。\n\n值得注意的是，攻击者的诱导动作并非对所有访客统一生效。Medi Face的取证结果显示，当攻击链路检测到来自印度尼西亚的移动终端访问时，会展示赌博网站；但如果访问来自日本的IP地址或PC终端，则会被引向一个无害的转发循环。这种基于访问来源国、IP地址和端机型态的cloaking机制，使得普通患者或用户在某些条件下看到的是正常的医疗机构页面，而真正落入赌博网站的诱导路径只在特定条件下触发。这种设计既能减少被一般用户察觉的概率，也让安全研究者和执法机关从常规IP和终端出发进行的检查难以直接观察到恶意内容。\n\nMedi Face将本次确认的攻击基础设施归纳为5层结构，包括多个服务器、伪造站点、cloaking引擎以及相应的控制机制。该公司已完成对cloaking引擎代码的分析，并将分析结果连同IoC（入侵指标）等材料作为技术资料对外公开。分析还发现，攻击者为隐藏行踪，删除了进入时使用的Web shell和后门文件。Medi Face的法律与安全团队通过恢复的缓存碎片、文件系统元数据和时戳信息，并对超过22万3701行服务器访问日志进行排查，追踪了攻击者的活动轨迹。\n\n连接路径调查显示，在经由印度尼西亚等地基础设施的远端，发现了分配给东京都内某IP地址的连接记录。Medi Face谨慎地指出，IP地址的注册地信息不能直接等同于实际使用者身份，但判断该连接点可能与实际主导攻击的人员有关。此外，从基础设施准备情况和伪造站点的搭建过程来看，攻击准备可能持续了120天以上；攻击者还使用Telegram的非公开频道进行指挥和通信，在加密环境下分配角色并同步进度。Medi Face公开了这些分析结果，并提醒日本及亚洲其他地区的医疗机构和企业，类似攻击可能正在推进。\n\n目前，Medi Face已就包括刑事控告和损害赔偿请求在内的法律措施进入准备阶段。辩护团队正考虑适用日本《不正当访问禁止法》以及电子计算机损坏等业务妨碍相关罪名，并计划通过刑事司法协助机制申请针对境外执行者的调查协作。Medi Face强调，医疗机构的Web站点本身并非唯一攻击对象，附着在域名之上的搜索引擎评价和患者信任，同样可能成为网络攻击的掠夺目标。该公司已在GitHub上公开了攻击基础设施结构图、cloaking引擎代码解析结果和IoC列表，并呼吁安全相关人士协助提供类似受害情报、验证印尼移动端访问展示情况、开展OSINT调查以及追踪联盟营销ID和支付渠道。",
+      "why_it_matters": "此案显示攻击目标已从单纯数据窃取转向“域名信任”的变现，对日本医疗行业尤其紧迫。企业IT需关注Web shell、GSC权限这类管理入口的暴露面，并警惕Cloudflare Pages等泛域名服务被滥用。对制造业、金融和云架构者的启示是：资产清单必须纳入域名、DNS和第三方托管账户的权限审计。同时，cloaking和Telegram等基础设施特征可作检测规则，建议安全团队对照公开IoC自查。",
       "generated_by": "local-litellm/9router-free-auto"
     }
   }
