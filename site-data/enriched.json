@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-19T00:03:21+0900",
+  "updated_at": "2026-08-19T00:18:04+0900",
   "articles": {
     "https://monoist.itmedia.co.jp/mn/articles/2608/14/news005.html": {
       "article_id": "ca3126d542a4ef66",
@@ -582,6 +582,25 @@
       ],
       "reading_text": "NeoBrowser 是一个面向 AI 模型的开源 MCP 服务器，核心思路是让 AI 像普通用户一样使用互联网——不是启动一个全新、可被指纹识别的无头浏览器，而是驱动你电脑上已经安装的真实 Chrome，并且可以选择复用你当前已登录的浏览器会话。这样 AI 一落地就已经通过身份验证，浏览器指纹也是真实、一致的，而不是靠伪造来蒙混过关。\n\n相比常见的 Playwright MCP、Puppeteer 或 browser-use 等工具，NeoBrowser 的差异点很明确：它驱动的是真实 Chrome 二进制，而不是捆绑的 Chromium；可以复用真实登录会话，不需要 API 密钥或反复登录；默认开启隐身加固，能通过 bot.sannysoft 的检测；元素查找采用语义化方式，结合可访问性树、启发式规则和可选 LLM；搜索支持多来源，能自动跳过被机器人墙拦截的站点；整包是单个静态 Rust 二进制，零运行时依赖，直接与 Chrome DevTools Protocol 通信，不经过 Selenium 或 WebDriver。\n\n项目的核心特性集中在几个方面。第一是真实会话浏览：用户可通过设置 NEOBROWSER_REAL_PROFILE 指定 Chrome 配置文件，NeoBrowser 会通过 macOS Keychain、Linux secret-service 或 Windows DPAPI 解密 Cookie 并注入，使 AI 以已登录状态工作。为避免把真实浏览器踢下线，Google、LinkedIn、Microsoft 等会话身份 Cookie 会被排除。还支持附加到已开启的远程调试端口（NEOBROWSER_ATTACH_PORT=9222），该模式下不会修补或关闭用户的真实浏览器。\n\n第二是隐身加固的哲学：不堆叠伪造，而是保持一致性。它运行真实 Chrome 二进制，所以 TLS、字体、GPU 都是真实的；强制 navigator.webdriver 为 undefined，通过反节流和焦点模拟让无头合成器保持活跃，确保内容正常渲染；User-Agent 通过启动参数改写为真实安装的 Chrome 版本，使 Client Hints 保持一致；不关闭 GPU，因此 WebGL 报告真实 GPU。输入层面，鼠标点击会沿多段路径移动光标并以人类节奏停顿，输入可逐键模拟真实时间间隔，这些都是行为检测系统关注的信号。项目 CI 每次推送都会安装 Chrome 并对真实浏览器运行检测，完整 bot.sannysoft 测试可用 cargo test --test stealth_verify -- --ignored 手动执行。\n\n第三是 bot 墙感知。NeoBrowser 并不承诺能够绕过交互式验证码——文档明确承认 reCAPTCHA、Turnstile、DataDome 等仍可能拦截，全新的无 Cookie 配置文件本身也是信号。它的优势在于能检测到这些墙（navigate 工具会标记），并让模型选择交回人工处理或走真实会话路径，而不是盲目重试。\n\n基准测试方面，仓库提供了一个可复现的对比框架，与 Playwright MCP 做中立的两方比较。初次结果比较诚实：在共享功能任务上两者都通过，但 Playwright MCP 更快，原因是 NeoBrowser 为了等待延迟内容渲染而强制刷新帧，付出了性能代价；NeoBrowser 则补上了 Playwright MCP 没有的会话持久化和 bot 墙检测。在对抗性页面上两者同样被墙——仅靠单一 IP 无法宣称“更会绕过”，需要住宅代理和重复运行。指标将 task_execution_success 和 destination_access_success 分开，避免检测到墙后虚增成功分数。\n\n安装上，macOS/Linux 一行命令即可，Windows 提供预编译二进制。要求系统装有 Google Chrome 或 Chromium，可通过 NEOBROWSER_CHROME_BIN 指定路径。配置项还包括代理、GPU 开关、工作目录等。整体来看，NeoBrowser 适合需要真实登录态、稳定会话和反检测能力的 AI 自动化场景，但在对抗性反爬环境下仍有明确边界。",
       "why_it_matters": "",
+      "generated_by": "local-litellm/9router-free-auto"
+    },
+    "https://www.theregister.com/ai-and-ml/2026/08/18/google-buys-crashed-airline-spirits-data-at-auction-because-ai/5288962": {
+      "article_id": "16a7068d982b3f82",
+      "source": "theregister.com",
+      "original_title": "Google buys crashed airline Spirit's data at auction, because AI",
+      "original_url": "https://www.theregister.com/ai-and-ml/2026/08/18/google-buys-crashed-airline-spirits-data-at-auction-because-ai/5288962",
+      "zh_title": "Google 以千万美元拍下破产航空公司 Spirit 数据，旨在强化 AI 能力",
+      "summary": "美国低成本航空公司 Spirit 因 COVID-19 冲击于 2026 年 5 月关闭并进入清算程序。Google 在资产拍卖中以 1000 万美元购得 Spirit 的大量企业数据，包括超过 1 亿封电子邮件、5 亿项 Microsoft Teams 数据、3000 多万条客服通话录音以及航班运营记录等。Google 表示此收购用于改进其 AI 服务，竞标对手包括 AI 训练数据提供商 Mercor。所有数据在拍卖前已去标识化，Google 承诺进一步清除任何个人身份信息，以保障隐私。",
+      "key_points": [
+        "Spirit 航空公司因 COVID-19 导致财务亏损，于 2026 年 5 月永久停飞并启动清算。",
+        "Google 以 1000 万美元在拍卖中购得 Spirit 的去标识化企业数据。",
+        "数据内容包括超过 1 亿封电子邮件、5 亿项 Microsoft Teams 数据、1700 万 OneDrive 文件和 2050 万 SharePoint 项目。",
+        "还包括超过 3000 万条客服通话录音、1500 多万条客服聊天记录，以及 ServiceNow 工单、航班运营数据等。",
+        "Google 公开表示购买数据是为了提升 AI 服务，竞标对手 Mercor 是一家 AI 训练数据公司。",
+        "数据在拍卖前已去标识化，Google 承诺清除任何残余个人身份信息，以符合隐私保护要求。"
+      ],
+      "reading_text": "Spirit 航空公司作为美国低成本航空运营商，在 2020 年 COVID-19 疫情爆发后陷入财务困境，持续亏损直至 2026 年 5 月宣布永久停飞，并进入破产清算程序。为筹集资金偿还债务，清算方对 Spirit 的资产进行公开拍卖，其中一项重要资产是该公司积累的企业数据。Google 参与竞标并以 1000 万美元成功购得这批数据，竞标对手包括 AI 训练数据提供商 Mercor，显示出科技公司对高质量训练数据的强烈需求。\n\n这批数据规模庞大，涵盖 Spirit 运营的多个方面。电子邮件数据超过 1 亿封，Microsoft Teams 交互数据达 5 亿项，OneDrive 文件有 1700 万份，SharePoint 项目超过 2050 万项。此外，还包括 3000 多万条客服通话录音、1500 多万条客服聊天记录，以及 ServiceNow 工单 60 万份、Oracle Responsys 营销应用的 1370 万活跃电子邮件地址、1100 万份机上 Wi-Fi 服务销售记录。运营数据方面，有 76.3 万次航班记录、500 万次机组配对、120 多万张燃油单据，以及 78.7 万份零件采购记录。\n\nGoogle 声称购买这些数据的主要目的是改进其 AI 服务，特别是训练特定领域的小型语言模型。近年来，AI 专家逐渐认为大型语言模型在某些应用场景中过于笨重，而针对特定行业如航空运营的小型模型更具实用性和效率。Spirit 的数据提供了丰富的航空运营和商业记录，可能成为训练此类模型的基础。例如，航班数据可用于优化调度预测，客服记录可用于提升客户服务 AI 的交互能力。\n\n然而，数据隐私问题引发关注。尽管数据在拍卖前已进行去标识化处理，Google 仍承诺对获取的数据进行额外清洗，彻底移除任何可识别的个人身份信息。这一措施旨在符合数据保护法规，避免潜在泄露风险。尽管如此，The Register 报道指出，未来仍可能出现因数据残留导致的隐私漏洞，这考验着企业的数据管理能力。\n\n从影响来看，此交易反映了 AI 行业对高质量、特定领域数据的渴求，尤其是在企业破产清算场景中，数据作为独立资产的价值日益凸显。同时，它突显了云架构和数据平台在存储、迁移及处理大规模数据集中的关键作用。对于金融判断而言，此类收购提供了新的投资视角，数据资产可能成为企业估值的重要组成部分。限制方面，数据的去标识化效果、AI 模型的实际应用效果，以及跨行业数据复用的合规性，都是需要持续评估的因素。",
+      "why_it_matters": "此事件对日本市场、企业 IT、制造业、数据平台、云架构和金融判断具有多重价值。在日本市场，航空业和制造业同样面临数字化转型压力，Google 的收购显示数据作为战略资产的重要性，可推动本土企业重视数据治理与 AI 应用。对企业 IT 而言，它突显了在并购或破产清算中评估数据资产价值的必要性，优化数据迁移与云存储策略。制造业中，类似运营数据可用于预测性维护和供应链优化。数据平台",
       "generated_by": "local-litellm/9router-free-auto"
     }
   }
