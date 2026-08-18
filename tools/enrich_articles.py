@@ -21,7 +21,7 @@ PRIVATE_CACHE = ROOT / "output/enriched/private.json"
 LOCAL_PREVIEW = ROOT / "output/local-preview/index.html"
 LITELLM_URL = os.environ.get("RSSYXY_LITELLM_URL", "http://127.0.0.1:20130")
 MODEL = os.environ.get("RSSYXY_LITELLM_MODEL", "9router-free-auto")
-LIMIT = int(os.environ.get("RSSYXY_AI_LIMIT", "8"))
+LIMIT = int(os.environ.get("RSSYXY_AI_LIMIT", "200"))
 
 
 def load_json(path: Path, default):
@@ -69,7 +69,7 @@ def fetch_readable(url: str) -> str:
 
 
 def generate_chinese(item: dict, readable: str, key: str) -> dict:
-    prompt = f"""你是企业高管的中文情报编辑。根据文章生成站内阅读稿。输出严格 JSON，不要代码围栏。
+    prompt = f"""你是企业高管的中文情报编辑。根据文章生成站内阅读稿。输出单个 JSON 对象（不要数组、不要其它文本），不能有代码围栏。
 字段要求：zh_title 为准确自然的中文标题；summary 为 120-200 字中文摘要；key_points 为 4-6 条具体事实；reading_text 为 700-1200 字中文详细转述，覆盖背景、论点、数据、影响和限制，不逐句翻译、不虚构；why_it_matters 用 80-150 字说明对日本市场、企业 IT、制造业、数据平台、云架构或金融判断的价值。保留产品名、公司名和专有名词原文。
 
 原始标题：{item['title']}
@@ -104,16 +104,20 @@ def generate_chinese(item: dict, readable: str, key: str) -> dict:
     try:
         parsed = json.loads(content)
     except json.JSONDecodeError:
-        parsed = json.loads(repair_json(content))
+        try:
+            parsed = json.loads(repair_json(content))
+        except Exception:
+            raise ValueError(f"JSON 无法修复解析: content_head={content[:120]!r}")
     if isinstance(parsed, list):
         # some routers wrap a single object inside an array; take the object
         objects = [p for p in parsed if isinstance(p, dict)]
         if objects:
             parsed = objects[0]
         else:
-            raise ValueError("模型返回非对象 JSON: list")
+            formatted = json.dumps(parsed, ensure_ascii=False)
+            raise ValueError(f"模型返回非对象 JSON 数组: {formatted[:120]}")
     if not isinstance(parsed, dict):
-        raise ValueError(f"模型返回非对象 JSON: {type(parsed).__name__}")
+        raise ValueError(f"模型返回非对象 JSON: {type(parsed).__name__}: {str(parsed)[:120]}")
     return parsed
 
 

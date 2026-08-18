@@ -72,6 +72,15 @@ jobs:
           fetch-depth: 1
           clean: true
 
+      - name: Preserve committed enriched report
+        run: |
+          cp index.html /tmp/committed-index.html 2>/dev/null || true
+          if [ -f /tmp/committed-index.html ] && grep -q "wisdom-enriched-data" /tmp/committed-index.html; then
+            echo "committed enriched index.html preserved"
+          else
+            echo "no enriched committed index.html"
+          fi
+
       - name: Check Expiration
         env:
           GH_TOKEN: ${{ github.token }}
@@ -191,13 +200,24 @@ jobs:
       - name: Prepare GitHub Pages assets
         if: success()
         run: |
-          if [ ! -f index.html ]; then
-            echo "Generated index.html was not found"
+          # Prefer the locally-enriched committed report so that in-site reading
+          # editions (Chinese summaries) stay in sync with the page links. The
+          # CI-regenerated index.html usually has fresh links that the local
+          # LiteLLM enrichment cache has not yet covered.
+          SRC=index.html
+          if [ -f /tmp/committed-index.html ] && grep -q "wisdom-enriched-data" /tmp/committed-index.html; then
+            SRC=/tmp/committed-index.html
+            echo "deploying committed enriched index.html"
+          else
+            echo "deploying CI-generated index.html"
+          fi
+          if [ ! -f "$SRC" ]; then
+            echo "index.html was not found"
             exit 1
           fi
           rm -rf github_pages_dist
           mkdir -p github_pages_dist
-          cp index.html github_pages_dist/index.html
+          cp "$SRC" github_pages_dist/index.html
 
       - name: Configure GitHub Pages
         if: success()
