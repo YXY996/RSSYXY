@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-18T23:50:48+0900",
+  "updated_at": "2026-08-19T00:03:21+0900",
   "articles": {
     "https://monoist.itmedia.co.jp/mn/articles/2608/14/news005.html": {
       "article_id": "ca3126d542a4ef66",
@@ -563,6 +563,25 @@
       ],
       "reading_text": "Google于2026年8月19日宣布推出面向AI模型的开源编译器「HEIR」（官网：heir.dev）。HEIR的核心价值在于，它能够将训练好的AI模型编译并转换为支持完全同态加密（FHE）的形态，从而让模型在不解密数据的情况下直接对加密数据进行推理和处理。这一技术为解决AI应用中的数据隐私与安全难题提供了新的路径。\n\n在传统架构中，AI模型若要处理数据，通常需要先解密，这会导致敏感信息暴露给云服务商或第三方。HEIR利用FHE技术，使数据在加密状态下即可参与计算。AI模型主要由逻辑和参数构成，HEIR通过编译将模型逻辑转换为FHE兼容的逻辑，使模型能够直接操作加密数据。具体使用方式上，程序员只需在Python代码中通过注解标明哪些数据需要作为秘密处理，HEIR便会在编译阶段自动完成FHE转换，无需开发者深入理解密码学细节。\n\nGoogle在公告中介绍了HEIR的四个应用案例。第一，深度学习推荐处理，与Belfort Labs、LG和纽约大学合作，可在加密状态下提供个性化推荐。第二，信用卡欺诈检测，与Niobium和hardshell.ai合作，能够在不暴露交易细节的前提下识别欺诈行为。第三，加密网络流量异常检测，利用HEIR编译现有的入侵检测系统Kitsune（论文见arXiv:1802.09089），与Niobium共同推进，可对网络上的加密流量直接进行安全分析，无需解密内容。第四，热词检测，与Belfort Labs合作开发用于AI智能体的热词检测器，使设备在本地或云端处理加密的语音指令。\n\nHEIR的发布对云服务和AI应用具有深远意义。借助HEIR，云服务商和AI服务提供商可以在不查看加密数据内容的情况下，提供安全分析、智能推荐、欺诈检测等服务，从而在保障用户隐私的同时实现AI功能。这尤其适用于处理客户敏感信息、医疗数据、金融交易等场景。\n\n不过，HEIR目前仍处于开发阶段，尚未完全成熟。Google表示，希望HEIR能够成为应用开发者实现隐私保护软件的简单起点，并成为FHE领域的行业标准编译器。FHE技术本身存在计算开销较大的问题，HEIR的编译优化效果和实际性能表现仍需进一步验证。但作为Google推动隐私计算的重要一步，HEIR为AI与密码学的结合提供了可落地的工具链，值得关注。",
       "why_it_matters": "对日本市场而言，企业IT和制造业普遍重视数据安全与合规，HEIR使云上AI处理加密数据成为可能，可降低敏感数据泄露风险。金融行业可用于欺诈检测和客户数据分析，制造业可保护生产数据隐私。作为开源编译器，HEIR有望成为FHE标准，影响数据平台和云架构设计，为日本企业采用隐私增强AI提供技术基础。",
+      "generated_by": "local-litellm/9router-free-auto"
+    },
+    "https://github.com/pitiflautico/neobrowser": {
+      "article_id": "125c247335680fc7",
+      "source": "github.com",
+      "original_title": "NeoBrowser: An MCP server that drives real Chrome with your logged-in sessions",
+      "original_url": "https://github.com/pitiflautico/neobrowser",
+      "zh_title": "NeoBrowser：用真实Chrome与登录会话驱动AI浏览的MCP服务器",
+      "summary": "NeoBrowser 是一款开源的 MCP 服务器，让 AI 模型直接驱动真实 Chrome 浏览器，并复用用户已登录的会话，从而避开登录墙与机器人检测。它通过真实指纹通过 bot.sannysoft 检测，模拟人类鼠标移动和输入，提供 43 个工具，并具备多源搜索、多标签页、播放记录回放等功能。核心为单个约 4 MB 的静态 Rust 二进制，无需运行时依赖。项目同时提供与 Playwright MCP 的基准对比，诚实披露速度略慢、但支持会话持久化与 bot 墙检测。安装简便，支持 macOS、Linux、Windows。",
+      "key_points": [
+        "NeoBrowser 是一个 MCP 服务器，驱动真实 Chrome 二进制，可复用用户真实登录会话，无需 API 密钥或重新登录。",
+        "提供 43 个工具，包括导航、点击、输入、表单提交、文件上传下载、截图、表格提取、控制台/网络日志、性能指标、播放记录回放及多源搜索。",
+        "核心为单个约 4 MB 的静态 Rust 二进制，无运行时依赖；原 Python 实现保留作为测试参照。",
+        "通过真实指纹通过 bot.sannysoft 检测：真实 GPU WebGL、navigator.webdriver 隐藏、真实版本 User-Agent 匹配 Client Hints；输入行为模拟人类节奏。",
+        "具备 bot 墙感知能力，能检测 CAPTCHA、登录墙、限速等并告知模型如何应对；real-session 模式通过操作系统钥匙串解密并注入 Cookie。",
+        "基准测试显示与 Playwright MCP 对比：功能任务均通过，但 Playwright MCP 更快；NeoBrowser 额外提供会话持久化和 bot 墙检测，对抗性页面上两者同样受限。"
+      ],
+      "reading_text": "NeoBrowser 是一个面向 AI 模型的开源 MCP 服务器，核心思路是让 AI 像普通用户一样使用互联网——不是启动一个全新、可被指纹识别的无头浏览器，而是驱动你电脑上已经安装的真实 Chrome，并且可以选择复用你当前已登录的浏览器会话。这样 AI 一落地就已经通过身份验证，浏览器指纹也是真实、一致的，而不是靠伪造来蒙混过关。\n\n相比常见的 Playwright MCP、Puppeteer 或 browser-use 等工具，NeoBrowser 的差异点很明确：它驱动的是真实 Chrome 二进制，而不是捆绑的 Chromium；可以复用真实登录会话，不需要 API 密钥或反复登录；默认开启隐身加固，能通过 bot.sannysoft 的检测；元素查找采用语义化方式，结合可访问性树、启发式规则和可选 LLM；搜索支持多来源，能自动跳过被机器人墙拦截的站点；整包是单个静态 Rust 二进制，零运行时依赖，直接与 Chrome DevTools Protocol 通信，不经过 Selenium 或 WebDriver。\n\n项目的核心特性集中在几个方面。第一是真实会话浏览：用户可通过设置 NEOBROWSER_REAL_PROFILE 指定 Chrome 配置文件，NeoBrowser 会通过 macOS Keychain、Linux secret-service 或 Windows DPAPI 解密 Cookie 并注入，使 AI 以已登录状态工作。为避免把真实浏览器踢下线，Google、LinkedIn、Microsoft 等会话身份 Cookie 会被排除。还支持附加到已开启的远程调试端口（NEOBROWSER_ATTACH_PORT=9222），该模式下不会修补或关闭用户的真实浏览器。\n\n第二是隐身加固的哲学：不堆叠伪造，而是保持一致性。它运行真实 Chrome 二进制，所以 TLS、字体、GPU 都是真实的；强制 navigator.webdriver 为 undefined，通过反节流和焦点模拟让无头合成器保持活跃，确保内容正常渲染；User-Agent 通过启动参数改写为真实安装的 Chrome 版本，使 Client Hints 保持一致；不关闭 GPU，因此 WebGL 报告真实 GPU。输入层面，鼠标点击会沿多段路径移动光标并以人类节奏停顿，输入可逐键模拟真实时间间隔，这些都是行为检测系统关注的信号。项目 CI 每次推送都会安装 Chrome 并对真实浏览器运行检测，完整 bot.sannysoft 测试可用 cargo test --test stealth_verify -- --ignored 手动执行。\n\n第三是 bot 墙感知。NeoBrowser 并不承诺能够绕过交互式验证码——文档明确承认 reCAPTCHA、Turnstile、DataDome 等仍可能拦截，全新的无 Cookie 配置文件本身也是信号。它的优势在于能检测到这些墙（navigate 工具会标记），并让模型选择交回人工处理或走真实会话路径，而不是盲目重试。\n\n基准测试方面，仓库提供了一个可复现的对比框架，与 Playwright MCP 做中立的两方比较。初次结果比较诚实：在共享功能任务上两者都通过，但 Playwright MCP 更快，原因是 NeoBrowser 为了等待延迟内容渲染而强制刷新帧，付出了性能代价；NeoBrowser 则补上了 Playwright MCP 没有的会话持久化和 bot 墙检测。在对抗性页面上两者同样被墙——仅靠单一 IP 无法宣称“更会绕过”，需要住宅代理和重复运行。指标将 task_execution_success 和 destination_access_success 分开，避免检测到墙后虚增成功分数。\n\n安装上，macOS/Linux 一行命令即可，Windows 提供预编译二进制。要求系统装有 Google Chrome 或 Chromium，可通过 NEOBROWSER_CHROME_BIN 指定路径。配置项还包括代理、GPU 开关、工作目录等。整体来看，NeoBrowser 适合需要真实登录态、稳定会话和反检测能力的 AI 自动化场景，但在对抗性反爬环境下仍有明确边界。",
+      "why_it_matters": "",
       "generated_by": "local-litellm/9router-free-auto"
     }
   }
