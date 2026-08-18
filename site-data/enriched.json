@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-18T22:07:38+0900",
+  "updated_at": "2026-08-18T22:53:49+0900",
   "articles": {
     "https://monoist.itmedia.co.jp/mn/articles/2608/14/news005.html": {
       "article_id": "ca3126d542a4ef66",
@@ -468,6 +468,25 @@
         "韩国 OpenSearch 社区领袖参与展位和用户组 meetup。"
       ],
       "reading_text": "AWS 于2026年8月17日发布新一期 AWS Weekly Roundup，由 Channy Yun 撰写，汇总过去一周的重要产品与社区动态。文章首先回顾了 AWS 开发者参加在韩国举行的 Open Source Summit Korea 2026 与 MCP DevSummit Seoul 2026 的情况。这两场活动由 Linux Foundation 主办，为期四天，OpenSearch 与 Valkey 两个开源项目的社区领袖、维护者和用户聚集在一起，分享经验、协作解决问题并推动项目发展。韩国 OpenSearch 社区领袖还主动参与 AWS 展位，并在 Seoul 用户组 meetup 中交流。\n\n在开源项目进展方面，文章重点介绍 OpenSearch 与 Valkey",
+      "why_it_matters": "",
+      "generated_by": "local-litellm/9router-free-auto"
+    },
+    "https://atmarkit.itmedia.co.jp/ait/articles/2608/18/news049.html": {
+      "article_id": "36e4dcd6e11891b3",
+      "source": "atmarkit.itmedia.co.jp",
+      "original_title": "ブラウザ内AI推論を「最大60倍」速く Web AIランタイム「LiteRT.js」をGoogleが発表",
+      "original_url": "https://atmarkit.itmedia.co.jp/ait/articles/2608/18/news049.html",
+      "zh_title": "Google发布Web AI运行时LiteRT.js：浏览器内AI推理最高提速60倍，无需服务器",
+      "summary": "Google宣布推出面向Web的AI运行时LiteRT.js，作为其端侧推理库LiteRT的JavaScript绑定。开发者可在浏览器中直接运行ML/AI模型，支持文本生成、物体检测、语音处理等任务。相比传统JavaScript内核，LiteRT.js通过WebAssembly调用Google原生跨平台运行时，结合CPU、GPU、NPU硬件加速，官方称相比标准CPU执行可实现5至60倍提速。初期版本提供npm包和演示集，并兼容TensorFlow.js现有管线。该方案有望降低服务器成本、增强隐私并实现超低延迟推理。",
+      "key_points": [
+        "Google于2026年7月9日发布LiteRT.js，是端侧推理库LiteRT的JavaScript绑定，面向生产环境Web应用。",
+        "LiteRT源自2024年由TensorFlow Lite更名，支持PyTorch、JAX、Keras等多框架模型。",
+        "LiteRT.js通过WebAssembly暴露Google原生跨平台运行时，支持CPU（XNNPACK）、GPU（ML Drift + WebGPU）、NPU（WebNN API，Chrome/Edge实验性）加速。",
+        "官方称相比标准CPU执行，推理速度可提升5至60倍；模型在本地运行，可增强隐私、消除服务器成本、实现超低延迟。",
+        "提供LiteRT Torch工具一键转换PyTorch模型，AI Edge Quantizer支持逐层自定义量化，兼顾模型质量与体积、性能。",
+        "兼容TensorFlow.js张量，可直接集成现有TensorFlow.js架构；初期发布包含npm包和演示集合。"
+      ],
+      "reading_text": "2026年8月18日，＠IT报道了Google发布Web AI运行时LiteRT.js的消息。该产品于2026年7月9日（美国时间）正式公布，定位为Google端侧推理库LiteRT的JavaScript绑定，目标是在生产环境的Web应用中直接运行机器学习与AI模型。LiteRT本身是TensorFlow Lite的继任者，2024年更名，背景是它已从TensorFlow框架扩展到PyTorch、JAX、Keras等多个框架，名称变更反映了多框架支持的进展。LiteRT据称运行在数十亿台设备上。\n\nLiteRT.js的核心价值在于，它让开发者用JavaScript或TypeScript把模型集成进应用，在客户端完成文本生成、物体检测、语音处理等任务。由于模型在本地执行，用户隐私得到增强，服务器成本被消除，同时能支撑实时交互所需的超低延迟。Google将其视为TensorFlow.js的强进化版，因为传统Web AI方案依赖性能较弱的JavaScript内核，而LiteRT.js通过WebAssembly把Google原生跨平台运行时及其优化直接提供给Web开发者。\n\n硬件加速是主要卖点。CPU后端使用Google的XNNPACK库，提供多线程支持和relaxed SIMD构建；GPU后端采用ML Drift，通过WebGPU API加速；NPU后端则利用新的WebNN API，目前Chrome和Edge中处于实验阶段，可面向专用NPU实现高能效、超低延迟推理。官方给出的数据是，相比标准CPU执行，推理速度可提升5至60倍。此外，LiteRT.js支持直接解析TensorFlow.js张量作为输入输出，因此能快速集成到现有TensorFlow.js架构中。\n\n工具链方面，Python库LiteRT Torch可一键转换PyTorch模型，使其立即用于浏览器端硬件加速；AI Edge Quantizer允许按层定制量化方案，在保持整体模型质量的同时显著减小体积、提升性能。初期发布包括新的npm包和演示集合，方便开发者上手。\n\n不过，报道也隐含一些限制。WebNN API仍处于实验阶段，NPU加速的可用性取决于浏览器支持；LiteRT.js属于初期版本，生态和文档有待完善；5至60",
       "why_it_matters": "",
       "generated_by": "local-litellm/9router-free-auto"
     }
