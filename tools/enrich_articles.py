@@ -102,9 +102,19 @@ def generate_chinese(item: dict, readable: str, key: str) -> dict:
         raise ValueError(f"模型返回空内容: model={MODEL}, finish={raw.get('choices') and raw['choices'][0].get('finish_reason')}, usage={raw.get('usage')}")
     content = re.sub(r"^```(?:json)?\s*|\s*```$", "", content, flags=re.DOTALL)
     try:
-        return json.loads(content)
+        parsed = json.loads(content)
     except json.JSONDecodeError:
-        return json.loads(repair_json(content))
+        parsed = json.loads(repair_json(content))
+    if isinstance(parsed, list):
+        # some routers wrap a single object inside an array; take the object
+        objects = [p for p in parsed if isinstance(p, dict)]
+        if objects:
+            parsed = objects[0]
+        else:
+            raise ValueError("模型返回非对象 JSON: list")
+    if not isinstance(parsed, dict):
+        raise ValueError(f"模型返回非对象 JSON: {type(parsed).__name__}")
+    return parsed
 
 
 def inject_cache(path: Path, articles: dict) -> None:
