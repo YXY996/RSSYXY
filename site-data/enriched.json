@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-19T01:21:37+0900",
+  "updated_at": "2026-08-19T09:02:50+0900",
   "articles": {
     "https://monoist.itmedia.co.jp/mn/articles/2608/14/news005.html": {
       "article_id": "ca3126d542a4ef66",
@@ -639,6 +639,25 @@
       ],
       "reading_text": "微软于2026年7月13日（美国时间）宣布，Microsoft Entra ID 将把 passkey 设为默认登录方式，并淘汰其自行提供的 SMS 与语音多要素认证。此举是为了把抗钓鱼认证变成所有组织的既定能力。微软指出，在当前可用方法中，SMS 与语音对钓鱼攻击和账户盗用的抵抗力最低，因此不再适合作为默认或长期依赖的第二因素。\n\npasskey 采用与设备或同步凭据存储绑定的公钥密码。密钥对与正在访问的域名绑定，钓鱼站点无法完成有效认证，从而从机制上切断仿冒登录页窃取凭据的路径。每次认证都对一次性挑战值签名验证，对通信拦截后的重放攻击也有很高抵抗力。微软希望租户无需额外选择，即可默认获得更高认证强度。\n\n时间表已经锁定。2026年9月1日起，凡启用微软提供的 SMS 或语音 MFA 的用户，将自动成为 passkey 注册对象，并在完成 MFA 登录时被提示注册。2027年2月1日，微软自有 SMS 与语音投递服务彻底停用。同日之后，若用户可用的 MFA 方法只剩 SMS 或语音，登录时必须注册 passkey 且不可跳过。强制执行对全部租户一律适用，没有退出选项。已经使用 Windows Hello for Business 或 FIDO2 等其他抗钓鱼方法的用户，不受此次停用影响。\n\n在2026年9月1日至2027年2月1日的过渡期内，租户可通过 Microsoft Graph API 暂时推迟自动启用。调用需具备 Policy.ReadWrite.AuthenticationMethod 权限，对 authenticationmethodspolicy 发送 PATCH，将 optOutSettings 中的 passkeyDynamicMigration 设为 true。该设置仅使租户在过渡期内不进入自动迁移；2027年2月1日之后无论是否设置，都将进入统一强制时间表。推迟是为了给电信合同调整以及其他认证方法落地留出时间，并非永久豁免。\n\n微软给出四步落地路径：以全局读取者、认证策略管理员或安全读取者角色运行官方 PowerShell 脚本 entra-sms-voice-usage-analyzer，盘点仍启用 SMS 或语音的用户，结果非零即表示2027年2月后存在登录中断风险；在 Microsoft Entra 管理中心将 Registration campaign 状态设为 Microsoft Managed，并把目标安全组纳入注册活动；对监管或运营上仍必须使用 SMS 的用户，评估 Microsoft Security Store 中的通信服务商并单独签约；按认知、行动、提醒三个阶段向用户说明变更和操作方法。\n\n注册活动开启后，用户会在下一次完成 MFA 时被要求注册 passkey。默认情况下用户可以无限次推迟，因此若希望赶在2026年9月1日前压低对短信语音的依赖，应提前修改相关配置。Security Store 中通信服务商的确认窗口计划为2026年9月18日，实际选择与签约计划为2026年10月30日。从微软自有通道迁到 passkey 不产生额外费用，经 Store 使用第三方通信则按消息计费。此次停用覆盖 Entra 整体，包括自助密码重置 SSPR；SSPR 用户若仍需短信或语音，同样可走 Store。微软还计划为已采用无密码认证的用户另行提供密码变更支持。上述时间表仅适用于公共云，其他云环境将另行通知。",
       "why_it_matters": "日本企业普遍以 Entra ID 作为身份中枢，制造现场远程运维、供应链门户和财务审批仍大量使用短信 MFA。2027年2月强制停用可能造成生产与资金流程中断。应立即盘点受影响账号、推进 passkey 或 FIDO2，并将 Security Store 备援费用纳入 IT 预算。",
+      "generated_by": "local-litellm/omni-reasoning"
+    },
+    "https://aws.amazon.com/blogs/aws/in-the-works-aws-builder-lofts-in-berlin-hyderabad-and-sao-paulo/": {
+      "article_id": "115663ed6d76d07c",
+      "source": "aws.amazon.com",
+      "original_title": "In the works: AWS Builder Lofts in Berlin, Hyderabad, and São Paulo",
+      "original_url": "https://aws.amazon.com/blogs/aws/in-the-works-aws-builder-lofts-in-berlin-hyderabad-and-sao-paulo/",
+      "zh_title": "AWS计划在柏林、海得拉巴和圣保罗开设Builder Loft",
+      "summary": "AWS宣布计划在柏林、海得拉巴和圣保罗开设AWS Builder Loft。旧金山首家2025年7月开业，已接待超2.25万开发者。新永久空间免费提供工作坊、社交、路演与协作办公，并向AWS User Groups、学生团体及独立开发者免费开放场地。柏林聚焦数字主权与安全（配合AWS European Sovereign Cloud），海得拉巴服务印度AI与云原生学习，圣保罗对接巴西年增30%的云市场。开业时间另行公布。",
+      "key_points": [
+        "旧金山首家AWS Builder Loft于2025年7月开业，已接待超过22,500名开发者，举办黑客松、工作坊、演示之夜和社区活动。",
+        "AWS计划在柏林、海得拉巴和圣保罗开设永久Builder Loft，免费提供工作坊、社交活动、路演之夜、内容创作空间和协作办公区。",
+        "AWS User Groups、AWS Student Builder Groups及独立开发者团体的社区领袖可免费预订场地举办meetup。",
+        "柏林Loft配合AWS European Sovereign Cloud，将举办数字主权教育、黑客松和安全就绪工作坊，连接德国初创生态与欧洲及全球科技格局。",
+        "海得拉巴Loft为印度开发者提供AI技能提升、云原生架构探索和同行交流；圣保罗Loft服务年增长30%的巴西云市场，作为拉美开发者枢纽与本地社区、大学和初创网络合作。",
+        "旧金山Loft每周举办4至8场社区活动，空间灵活（培训室可容纳50多名学生），由社区驱动内容，AWS提供空间与支持。"
+      ],
+      "reading_text": "云计算发展初期，AWS曾在全球多个城市设立AWS Pop-up Lofts，为初创企业家、开发者及其他对AWS感兴趣的人士提供活动、会议和联合办公的实体空间。生成式AI兴起后，AWS推出AWS Gen AI Lofts，以快闪协作空间为初创企业和开发者提供沉浸式体验。AWS认识到需要永久性的社区空间，让学生和开发者通过动手实践、社区主导分享和技术协作来学习、连接并贡献。2025年7月，首家AWS Builder Loft在旧金山开业。该空间已接待超过22,500名开发者，举办黑客松、工作坊、演示之夜以及社区主导活动，将本地科技社区聚集在同一屋檐下。AWS现宣布计划在柏林、海得拉巴和圣保罗开设新的Builder Loft。每个地点都将成为永久社区空间，免费提供工作坊、社交活动、路演之夜、内容创作空间、协作与联合办公区以及活动举办服务，面向开发者、学生或技术专业人士。访客仍可在此遇见AWS专家，但更核心的是为本地技术社区提供家园，涵盖AWS User Groups、AWS Student Builder Groups以及独立开发者团体。作为技术社区领袖，可以免费申请预订场地举办meetup。选址这三座城市，是因为它们是各自区域快速增长的开发者城市和重要人才与创新枢纽。柏林方面，在推出AWS European Sovereign Cloud之后，AWS正深化对欧洲开发者社区的承诺。柏林Builder Loft将举办数字主权教育课程、黑客松、安全就绪工作坊和社区聚会，连接德国不断增长的初创生态系统与更广泛的欧洲及全球科技格局。海得拉巴Builder Loft将为印度开发者提供专门空间，用于提升AI技能、探索云原生架构，并与正在构建下一代应用的同行建立联系。圣保罗方面，巴西云市场正以每年30%的速度增长，该市处于拉丁美洲科技繁荣的中心，Builder Loft将作为该地区开发者的枢纽，与本地社区、大学和初创网络合作提供免费项目。旧金山Builder Loft的典型一周会举办四到八场社区活动，从生成式AI技术深潜到初创路演之夜，从学生编程工作坊到跨区域开发者社交。空间设计灵活，培训室上午可容纳50多名学生，晚上可转变为演示舞台，周末则由社区团体举办自己的聚会。该模式由社区自身驱动，本地开发者、meetup组织者和技术领袖塑造活动内容，AWS提供空间、基础设施和支持，能量来自参与的建设者。三座新Loft的具体开业时间尚未公布，AWS表示将在后续博客文章中宣布，并建议关注AWS Builder Loft页面和相关更新。文章未披露各新址的具体地址、面积、投资规模或精确开业日期，目前仍处于筹备阶段。",
+      "why_it_matters": "AWS在柏林、海得拉巴和圣保罗布局永久Builder Loft，对日本企业海外云与IT战略有参考价值。欧洲数字主权及AWS European Sovereign Cloud影响日企在欧合规与云架构；印度AI人才与巴西云市场年增30%，关乎制造业出海、数据平台多区域部署及新兴市场金融判断。社区驱动的开发者空间模式也可供日本企业IT与开发生态借鉴。",
       "generated_by": "local-litellm/omni-reasoning"
     }
   }
