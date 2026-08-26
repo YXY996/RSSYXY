@@ -407,6 +407,7 @@ def _load_webhook_config(config_data: Dict) -> Dict:
     bark = channels.get("bark", {})
     slack = channels.get("slack", {})
     generic = channels.get("generic_webhook", {})
+    xiaohongshu = channels.get("xiaohongshu", {})
 
     return {
         # 飞书
@@ -436,6 +437,10 @@ def _load_webhook_config(config_data: Dict) -> Dict:
         # 通用 Webhook
         "GENERIC_WEBHOOK_URL": _get_env_str("GENERIC_WEBHOOK_URL") or generic.get("webhook_url", ""),
         "GENERIC_WEBHOOK_TEMPLATE": _get_env_str("GENERIC_WEBHOOK_TEMPLATE") or generic.get("payload_template", ""),
+        # 小红书
+        "XHS_USER_DATA_DIR": _get_env_str("XHS_USER_DATA_DIR") or xiaohongshu.get("user_data_dir", ""),
+        "XHS_COVER_IMAGE": _get_env_str("XHS_COVER_IMAGE") or xiaohongshu.get("cover_image", ""),
+        "XHS_TOPICS": _get_env_str("XHS_TOPICS") or xiaohongshu.get("topics", "#AI资讯 #每日热榜 #科技前沿"),
     }
 
 
@@ -513,6 +518,11 @@ def _print_notification_sources(config: Dict) -> None:
         count = min(len(accounts), max_accounts)
         source = "环境变量" if os.environ.get("GENERIC_WEBHOOK_URL") else "配置文件"
         notification_sources.append(f"通用Webhook({source}, {count}个账号)")
+
+    # 小红书
+    if config.get("XHS_USER_DATA_DIR"):
+        source = "环境变量" if os.environ.get("XHS_USER_DATA_DIR") else "配置文件"
+        notification_sources.append(f"小红书({source})")
 
     if notification_sources:
         print(f"通知渠道配置来源: {', '.join(notification_sources)}")

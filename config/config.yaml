@@ -29,6 +29,247 @@ rss:
     enabled: true
     max_age_days: 1
   feeds:
+  # === 国内科技/云原生/开源 ===
+  - id: infoq-cn
+    name: InfoQ中文站
+    url: https://www.infoq.cn/rss
+    enabled: true
+    max_age_days: 2
+  - id: cncf-blog
+    name: CNCF 博客
+    url: https://www.cncf.io/blog/feed/
+    enabled: true
+    max_age_days: 7
+  - id: kubernetes-blog
+    name: Kubernetes 官方博客
+    url: https://kubernetes.io/feed.xml
+    enabled: true
+    max_age_days: 7
+  - id: alibaba-cloud
+    name: 阿里云技术博客
+    url: https://developer.aliyun.com/rss
+    enabled: true
+    max_age_days: 3
+  - id: tencent-cloud
+    name: 腾讯云开发者社区
+    url: https://cloud.tencent.com/developer/rss
+    enabled: true
+    max_age_days: 3
+  - id: huawei-cloud
+    name: 华为云开发者联盟
+    url: https://developer.huaweicloud.com/rss
+    enabled: true
+    max_age_days: 3
+  - id: qcloud-community
+    name: 腾讯云社区精选
+    url: https://cloud.tencent.com/developer/rss?tag=hot
+    enabled: true
+    max_age_days: 3
+  - id: xiaomi-tech
+    name: 小米技术团队
+    url: https://xiaomi-info.com/feed
+    enabled: true
+    max_age_days: 7
+  - id: meituan-tech
+    name: 美团技术团队
+    url: https://tech.meituan.com/feed
+    enabled: true
+    max_age_days: 7
+  - id: didi-tech
+    name: 滴滴技术博客
+    url: https://mp.weixin.qq.com/mp/profile_ext?action=home&__biz=MzI1MTA1MzM2Nw==&rss=1
+    enabled: false
+    max_age_days: 7
+  - id: bytedance-tech
+    name: 字节跳动技术团队
+    url: https://mp.weixin.qq.com/mp/profile_ext?action=home&__biz=MzI0MjA1Mjg2Ng==&rss=1
+    enabled: false
+    max_age_days: 7
+  - id: jd-tech
+    name: 京东云技术团队
+    url: https://jdc.jd.com/feed
+    enabled: true
+    max_age_days: 7
+  - id: dxy-tech
+    name: 丁香园技术
+    url: https://tech.dxy.cn/feed
+    enabled: true
+    max_age_days: 7
+  - id: bilibili-tech
+    name: 哔哩哔哩技术
+    url: https://www.bilibili.com/read/cv/feed
+    enabled: false
+    max_age_days: 7
+
+  # === 国际云原生/基础设施 ===
+  - id: aws-compute
+    name: AWS 计算博客
+    url: https://aws.amazon.com/blogs/compute/feed/
+    enabled: true
+    max_age_days: 7
+  - id: aws-containers
+    name: AWS 容器博客
+    url: https://aws.amazon.com/blogs/containers/feed/
+    enabled: true
+    max_age_days: 7
+  - id: aws-database
+    name: AWS 数据库博客
+    url: https://aws.amazon.com/blogs/database/feed/
+    enabled: true
+    max_age_days: 7
+  - id: aws-architecture
+    name: AWS 架构博客
+    url: https://aws.amazon.com/blogs/architecture/feed/
+    enabled: true
+    max_age_days: 7
+  - id: google-cloud
+    name: Google Cloud 博客
+    url: https://cloud.google.com/blog/rss.xml
+    enabled: true
+    max_age_days: 7
+  - id: gcp-kubernetes
+    name: GKE 博客
+    url: https://cloud.google.com/blog/products/containers-kubernetes/rss.xml
+    enabled: true
+    max_age_days: 7
+  - id: azure-devops
+    name: Azure DevOps 博客
+    url: https://devblogs.microsoft.com/azure-sdk/feed/
+    enabled: true
+    max_age_days: 7
+  - id: github-blog
+    name: GitHub 官方博客
+    url: https://github.blog/feed/
+    enabled: true
+    max_age_days: 7
+  - id: gitlab-blog
+    name: GitLab 博客
+    url: https://about.gitlab.com/blog/feed/
+    enabled: true
+    max_age_days: 7
+
+  # === 数据库/大数据/AI Infra ===
+  - id: pingcap-blog
+    name: PingCAP (TiDB) 博客
+    url: https://pingcap.com/blog/feed/
+    enabled: true
+    max_age_days: 7
+  - id: clickhouse-blog
+    name: ClickHouse 博客
+    url: https://clickhouse.com/blog/rss.xml
+    enabled: true
+    max_age_days: 7
+  - id: confluent-blog
+    name: Confluent (Kafka) 博客
+    url: https://www.confluent.io/blog/feed/
+    enabled: true
+    max_age_days: 7
+  - id: redis-blog
+    name: Redis 博客
+    url: https://redis.io/blog/feed.xml
+    enabled: true
+    max_age_days: 7
+  - id: mongodb-blog
+    name: MongoDB 博客
+    url: https://www.mongodb.com/blog/feed
+    enabled: true
+    max_age_days: 7
+  - id: elastic-blog
+    name: Elastic 博客
+    url: https://www.elastic.co/blog/feed
+    enabled: true
+    max_age_days: 7
+  - id: snowflake-blog
+    name: Snowflake 博客
+    url: https://www.snowflake.com/blog/feed/
+    enabled: true
+    max_age_days: 7
+  - id: databricks-blog
+    name: Databricks 博客
+    url: https://www.databricks.com/feed
+    enabled: true
+    max_age_days: 7
+
+  # === 可观测性/运维 ===
+  - id: prometheus-blog
+    name: Prometheus 博客
+    url: https://prometheus.io/blog/feed.xml
+    enabled: true
+    max_age_days: 14
+  - id: grafana-blog
+    name: Grafana 博客
+    url: https://grafana.com/blog/rss/
+    enabled: true
+    max_age_days: 7
+  - id: datadog-blog
+    name: Datadog 博客
+    url: https://www.datadoghq.com/blog/rss/
+    enabled: true
+    max_age_days: 7
+  - id: newrelic-blog
+    name: New Relic 博客
+    url: https://newrelic.com/blog/rss.xml
+    enabled: true
+    max_age_days: 7
+
+  # === 开发者工具/平台 ===
+  - id: cloudflare-blog
+    name: Cloudflare 博客
+    url: https://blog.cloudflare.com/rss/
+    enabled: true
+    max_age_days: 7
+  - id: vercel-blog
+    name: Vercel 博客
+    url: https://vercel.com/blog/rss.xml
+    enabled: true
+    max_age_days: 7
+  - id: netlify-blog
+    name: Netlify 博客
+    url: https://www.netlify.com/blog/rss.xml
+    enabled: true
+    max_age_days: 7
+  - id: supabase-blog
+    name: Supabase 博客
+    url: https://supabase.com/blog/rss.xml
+    enabled: true
+    max_age_days: 7
+  - id: planetscale-blog
+    name: PlanetScale 博客
+    url: https://planetscale.com/blog/rss.xml
+    enabled: true
+    max_age_days: 7
+  - id: railway-blog
+    name: Railway 博客
+    url: https://railway.app/blog/rss.xml
+    enabled: true
+    max_age_days: 7
+  - id: render-blog
+    name: Render 博客
+    url: https://render.com/blog/rss.xml
+    enabled: true
+    max_age_days: 7
+  - id: fly-blog
+    name: Fly.io 博客
+    url: https://fly.io/blog/rss.xml
+    enabled: true
+    max_age_days: 7
+
+  # === 保留原有高质量源 ===
+  - id: hacker-news
+    name: Hacker News
+    url: https://hnrss.org/frontpage
+    enabled: true
+    max_age_days: 2
+  - id: hacker-news-newest
+    name: Hacker News 最新
+    url: https://hnrss.org/newest
+    enabled: false
+    max_age_days: 1
+  - id: lobsters
+    name: Lobste.rs
+    url: https://lobste.rs/rss
+    enabled: true
+    max_age_days: 3
   - id: publickey-jp
     name: Publickey 日本 IT
     url: https://www.publickey1.jp/atom.xml
@@ -54,41 +295,33 @@ rss:
     url: https://rss.itmedia.co.jp/rss/2.0/monoist.xml
     enabled: true
     max_age_days: 4
-  - id: azure-blog
-    name: Microsoft Azure Blog
-    url: https://azure.microsoft.com/en-us/blog/feed/
-    enabled: true
-    max_age_days: 7
-  - id: aws-news
-    name: AWS News Blog
-    url: https://aws.amazon.com/blogs/aws/feed/
-    enabled: true
-    max_age_days: 7
-  - id: databricks-blog
-    name: Databricks Blog
-    url: https://www.databricks.com/feed
-    enabled: true
-    max_age_days: 7
-  - id: jpx-market
-    name: 日本交易所市场新闻
-    url: https://www.jpx.co.jp/rss/markets_news.xml
-    enabled: true
-    max_age_days: 5
-  - id: boj-news
-    name: 日本银行更新
-    url: https://www.boj.or.jp/rss/whatsnew.xml
-    enabled: true
-    max_age_days: 7
-  - id: fed-press
-    name: Federal Reserve Press Releases
-    url: https://www.federalreserve.gov/feeds/press_all.xml
-    enabled: true
-    max_age_days: 7
-  - id: hacker-news
-    name: Hacker News
-    url: https://hnrss.org/frontpage
+
+  # === 通用科技媒体 ===
+  - id: 36kr
+    name: 36氪
+    url: https://36kr.com/feed
     enabled: true
     max_age_days: 2
+  - id: huxiu
+    name: 虎嗅网
+    url: https://www.huxiu.com/rss.xml
+    enabled: true
+    max_age_days: 2
+  - id: geekpark
+    name: 极客公园
+    url: https://www.geekpark.net/rss
+    enabled: true
+    max_age_days: 3
+  - id: leiphone
+    name: 雷锋网
+    url: https://www.leiphone.com/rss
+    enabled: true
+    max_age_days: 3
+  - id: ifanr
+    name: 爱范儿
+    url: https://www.ifanr.com/feed
+    enabled: true
+    max_age_days: 3
 report:
   mode: current
   display_mode: keyword
@@ -155,6 +388,10 @@ notification:
     generic_webhook:
       webhook_url: ''
       payload_template: ''
+    xiaohongshu:
+      user_data_dir: ''  # 已暂停：Playwright 用户数据目录（保存登录态），如：output/xhs_profile
+      cover_image: ''    # 可选：自定义封面图路径
+      topics: '#AI资讯 #每日热榜 #科技前沿'  # 话题标签
 storage:
   backend: auto
   formats:
@@ -175,10 +412,10 @@ storage:
     enabled: false
     days: 7
 ai:
-  model: deepseek/deepseek-v4-flash
-  api_key: ''
-  api_base: ''
-  timeout: 120
+  model: openai/9router-free-auto
+  api_key: ''  # 本地运行请设置环境变量 AI_API_KEY，勿提交明文密钥
+  api_base: http://127.0.0.1:20129/v1
+  timeout: 300
   temperature: 1.0
   max_tokens: 5000
   num_retries: 1
@@ -193,13 +430,13 @@ ai_analysis:
   include_standalone: true
   include_rank_timeline: true
 ai_translation:
-  enabled: false
+  enabled: true
   language: 中文
   prompt_file: ai_translation_prompt.txt
   batch_size: 100
   batch_interval: 2
   scope:
-    hotlist: false
+    hotlist: true
     rss: true
     standalone: true
 advanced:

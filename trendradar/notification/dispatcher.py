@@ -32,6 +32,7 @@ from .senders import (
     send_to_telegram,
     send_to_wework,
     send_to_generic_webhook,
+    send_to_xiaohongshu,
 )
 
 
@@ -349,6 +350,13 @@ class NotificationDispatcher:
         if self.config.get("GENERIC_WEBHOOK_URL"):
             results["generic_webhook"] = self._send_generic_webhook(
                 report_data, report_type, update_info, proxy_url, mode, rss_items, rss_new_items,
+                ai_analysis, display_regions, standalone_data
+            )
+
+        # 小红书（需要 AI 分析启用）
+        if self.config.get("XHS_USER_DATA_DIR") and ai_analysis and ai_analysis.success:
+            results["xiaohongshu"] = self._send_xiaohongshu(
+                report_data, report_type, mode, rss_items, rss_new_items,
                 ai_analysis, display_regions, standalone_data
             )
 
@@ -829,5 +837,40 @@ class NotificationDispatcher:
             custom_smtp_server=self.config.get("EMAIL_SMTP_SERVER", ""),
             custom_smtp_port=self.config.get("EMAIL_SMTP_PORT", ""),
             get_time_func=self.get_time_func,
+        )
+
+    def _send_xiaohongshu(
+        self,
+        report_data: Dict,
+        report_type: str,
+        mode: str,
+        rss_items: Optional[List[Dict]] = None,
+        rss_new_items: Optional[List[Dict]] = None,
+        ai_analysis: Optional[AIAnalysisResult] = None,
+        display_regions: Optional[Dict] = None,
+        standalone_data: Optional[Dict] = None,
+    ) -> bool:
+        """发布到小红书（单账号，需要 AI 分析）"""
+        user_data_dir = self.config.get("XHS_USER_DATA_DIR", "")
+        if not user_data_dir:
+            print("[小红书] 未配置 XHS_USER_DATA_DIR，跳过发布")
+            return False
+
+        cover_image_path = self.config.get("XHS_COVER_IMAGE", "") or None
+        default_topics = self.config.get("XHS_TOPICS", "#AI资讯 #每日热榜 #科技前沿")
+
+        return send_to_xiaohongshu(
+            user_data_dir=user_data_dir,
+            report_data=report_data,
+            report_type=report_type,
+            mode=mode,
+            cover_image_path=cover_image_path,
+            default_topics=default_topics,
+            split_content_func=self.split_content_func,
+            rss_items=rss_items,
+            rss_new_items=rss_new_items,
+            ai_analysis=ai_analysis,
+            display_regions=display_regions or {},
+            standalone_data=standalone_data,
         )
 

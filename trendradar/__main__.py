@@ -173,6 +173,7 @@ class NewsAnalyzer:
                 cfg["BARK_URL"],
                 cfg["SLACK_WEBHOOK_URL"],
                 cfg["GENERIC_WEBHOOK_URL"],
+                cfg["XHS_USER_DATA_DIR"],  # 小红书
             ]
         )
 

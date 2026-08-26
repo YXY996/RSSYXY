@@ -1203,6 +1203,247 @@ def send_to_slack(
     return True
 
 
+def send_to_xiaohongshu(
+    user_data_dir: str,
+    report_data: Dict,
+    report_type: str,
+    mode: str = "daily",
+    *,
+    cover_image_path: Optional[str] = None,
+    default_topics: str = "#AI资讯 #每日热榜 #科技前沿",
+    split_content_func: Callable = None,
+    rss_items: Optional[list] = None,
+    rss_new_items: Optional[list] = None,
+    ai_analysis: Any = None,
+    display_regions: Optional[Dict] = None,
+    standalone_data: Optional[Dict] = None,
+) -> bool:
+    """
+    发布到小红书（使用 Playwright 自动化，复用登录态）
+
+    Args:
+        user_data_dir: Playwright 用户数据目录（保存登录 Cookie，首次需手动扫码登录）
+        report_data: 报告数据
+        report_type: 报告类型（如 "全天汇总"）
+        mode: 报告模式 (daily/current/incremental)
+        cover_image_path: 可选，封面图本地路径
+        default_topics: 默认话题标签，逗号分隔
+        split_content_func: 内容分批函数（用于提取 AI 分析摘要）
+        rss_items: RSS 统计条目
+        rss_new_items: RSS 新增条目
+        ai_analysis: AI 分析结果
+        display_regions: 区域显示配置
+        standalone_data: 独立展示区数据
+
+    Returns:
+        bool: 发布是否成功
+    """
+    import asyncio
+    from pathlib import Path
+
+    # 只有 AI 分析内容用于小红书正文
+    if not ai_analysis or not ai_analysis.success:
+        print("[小红书] AI 分析未启用或失败，跳过发布")
+        return False
+
+    # 提取 AI 分析文本（纯文本版）
+    ai_text = _render_ai_analysis(ai_analysis, "plain")
+
+    # 组装标题
+    now_str = datetime.now().strftime("%m月%d日")
+    title = f"📊 TrendRadar {report_type} | {now_str}"
+
+    # 组装正文：AI 分析 + 标签
+    topics = [t.strip() for t in default_topics.split(",") if t.strip()]
+    topics_str = " ".join(topics)
+
+    content = f"""{ai_text}
+
+---
+📍 数据来源：多平台热榜聚合 + RSS 精选
+⏰ 自动生成于 {datetime.now().strftime('%Y-%m-%d %H:%M')}
+
+{topics_str} #TrendRadar #资讯聚合"""
+
+    # 生成封面图（如果没提供）
+    if not cover_image_path:
+        cover_image_path = _generate_xhs_cover(title, now_str)
+
+    log_prefix = "小红书"
+    print(f"{log_prefix} 准备发布：{title}")
+
+    try:
+        # 异步执行 Playwright 自动化
+        result = asyncio.run(_xhs_publish_async(
+            user_data_dir=user_data_dir,
+            title=title,
+            content=content,
+            cover_image_path=cover_image_path,
+        ))
+        return result
+    except Exception as e:
+        print(f"{log_prefix} 发布出错：{e}")
+        return False
+
+
+async def _xhs_publish_async(
+    user_data_dir: str,
+    title: str,
+    content: str,
+    cover_image_path: Optional[str],
+) -> bool:
+    """Playwright 异步发布核心逻辑"""
+    from playwright.async_api import async_playwright
+
+    # 确保用户数据目录存在
+    Path(user_data_dir).mkdir(parents=True, exist_ok=True)
+
+    async with async_playwright() as p:
+        # 使用持久化上下文，复用登录态
+        context = await p.chromium.launch_persistent_context(
+            user_data_dir=user_data_dir,
+            headless=False,  # 需要可视模式才能发布
+            args=["--disable-blink-features=AutomationControlled"],
+            viewport={"width": 1280, "height": 800},
+            locale="zh-CN",
+        )
+
+        page = context.pages[0] if context.pages else await context.new_page()
+
+        try:
+            # 1. 打开创作中心
+            await page.goto("https://creator.xiaohongshu.com/publish/publish", wait_until="networkidle", timeout=60000)
+
+            # 2. 检查是否已登录（首次运行会停在登录页，需手动扫码）
+            # 等待登录完成：检测发布页面特有元素
+            print("[小红书] 等待登录/页面加载...")
+            await page.wait_for_selector(".publish-container, .creator-main, [data-testid='publish-page']", timeout=120000)
+            print("[小红书] 已进入发布页面")
+
+            # 3. 选择「图文」发布（默认可能是视频）
+            # 小红书创作中心默认是图文，一般不需要切换
+            # 但为了稳健，检查一下是否有图文/视频切换 tab
+            try:
+                await page.wait_for_selector("text=图文", timeout=3000)
+                await page.click("text=图文")
+                print("[小红书] 已选择图文模式")
+            except:
+                pass  # 已经是图文或找不到元素
+
+            # 4. 上传封面图
+            if cover_image_path and Path(cover_image_path).exists():
+                print(f"[小红书] 上传封面图: {cover_image_path}")
+                # 小红书的上传 input 通常是隐藏的，通过 label 触发
+                file_input = await page.wait_for_selector("input[type='file'][accept*='image']", timeout=10000)
+                await file_input.set_input_files(cover_image_path)
+                # 等待图片上传完成（出现预览）
+                await page.wait_for_selector(".preview-image, .image-preview, img[src*='blob:']", timeout=30000)
+                print("[小红书] 封面图上传完成")
+                await asyncio.sleep(1)
+
+            # 5. 填写标题
+            print("[小红书] 填写标题...")
+            # 标题输入框：通常有 placeholder="标题" 或 data-placeholder
+            title_input = await page.wait_for_selector("input[placeholder*='标题'], textarea[placeholder*='标题'], [data-testid='title-input']", timeout=10000)
+            await title_input.fill(title)
+            await asyncio.sleep(0.5)
+
+            # 6. 填写正文
+            print("[小红书] 填写正文...")
+            # 正文编辑器：通常是 contenteditable div 或 textarea
+            content_editor = await page.wait_for_selector("[contenteditable='true'][data-placeholder*='正文'], [contenteditable='true'].editor, textarea[placeholder*='正文'], [data-testid='content-editor']", timeout=10000)
+            await content_editor.fill(content)
+            await asyncio.sleep(0.5)
+
+            # 7. 添加话题标签（小红书正文中直接输入 #话题# 即可，已在 content 里包含）
+            # 如果需要显式点击「添加话题」按钮，可在此处理
+
+            # 8. 点击发布
+            print("[小红书] 点击发布...")
+            publish_btn = await page.wait_for_selector("button:has-text('发布'), button:has-text('发表'), [data-testid='publish-btn']", timeout=10000)
+            await publish_btn.click()
+
+            # 9. 等待发布成功提示
+            try:
+                await page.wait_for_selector("text=发布成功, text=发表成功, .success-toast, [data-testid='publish-success']", timeout=30000)
+                print("[小红书] ✅ 发布成功！")
+                await asyncio.sleep(2)
+                return True
+            except:
+                # 检查是否有错误提示
+                error_msg = await page.locator("text=失败, text=错误, .error-toast").first.text_content()
+                if error_msg:
+                    print(f"[小红书] ❌ 发布失败：{error_msg}")
+                else:
+                    print("[小红书] ⚠️ 发布状态未知，请手动检查")
+                return False
+
+        finally:
+            await context.close()
+
+
+def _generate_xhs_cover(title: str, date_str: str) -> str:
+    """生成小红书风格封面图（返回本地路径）"""
+    from PIL import Image, ImageDraw, ImageFont
+    import textwrap
+    import uuid
+
+    # 画布：小红书推荐 3:4 比例，如 1080x1440
+    width, height = 1080, 1440
+    img = Image.new("RGB", (width, height), color="#FAFAFA")
+    draw = ImageDraw.Draw(img)
+
+    # 渐变背景（简单模拟：顶部深色，底部浅色）
+    for y in range(height):
+        ratio = y / height
+        r = int(250 * (1 - ratio * 0.15) + 100 * ratio * 0.15)
+        g = int(250 * (1 - ratio * 0.15) + 150 * ratio * 0.15)
+        b = int(250 * (1 - ratio * 0.15) + 200 * ratio * 0.15)
+        draw.line([(0, y), (width, y)], fill=(r, g, b))
+
+    # 装饰：左上角小红书风格红色色块
+    draw.rounded_rectangle([40, 40, 200, 120], radius=20, fill="#FF2442")
+
+    # 字体加载（尝试系统字体，失败用默认）
+    try:
+        font_title = ImageFont.truetype("msyh.ttc", 56)  # 微软雅黑
+        font_sub = ImageFont.truetype("msyh.ttc", 32)
+        font_small = ImageFont.truetype("msyh.ttc", 28)
+    except:
+        font_title = ImageFont.load_default()
+        font_sub = ImageFont.load_default()
+        font_small = ImageFont.load_default()
+
+    # 标题（居中，自动换行）
+    title_lines = textwrap.wrap(title, width=14)
+    y_start = 300
+    for i, line in enumerate(title_lines):
+        bbox = draw.textbbox((0, 0), line, font=font_title)
+        w = bbox[2] - bbox[0]
+        draw.text(((width - w) // 2, y_start + i * 70), line, fill="#1A1A2E", font=font_title)
+
+    # 日期
+    date_text = f"📅 {date_str}"
+    bbox = draw.textbbox((0, 0), date_text, font=font_sub)
+    w = bbox[2] - bbox[0]
+    draw.text(((width - w) // 2, y_start + len(title_lines) * 70 + 30), date_text, fill="#666", font=font_sub)
+
+    # 底部品牌
+    brand = "TrendRadar · 智能资讯聚合"
+    bbox = draw.textbbox((0, 0), brand, font=font_small)
+    w = bbox[2] - bbox[0]
+    draw.text(((width - w) // 2, height - 100), brand, fill="#999", font=font_small)
+
+    # 保存
+    output_path = Path("output") / "xhs_covers"
+    output_path.mkdir(parents=True, exist_ok=True)
+    filename = f"cover_{uuid.uuid4().hex[:8]}.png"
+    full_path = output_path / filename
+    img.save(full_path, "PNG", quality=95)
+    print(f"[小红书] 封面图已生成: {full_path}")
+    return str(full_path)
+
+
 def send_to_generic_webhook(
     webhook_url: str,
     payload_template: Optional[str],

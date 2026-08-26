@@ -8,3 +8,10 @@ output/rss/
 output/index.html
 output/news/*.db
 output/daily-refresh.log
+
+# secrets & local-only
+litellm_config.yaml
+output/xhs_covers/
+output/xhs_profile/
+output/xhs_profile_v2/
+output/retry*.py
