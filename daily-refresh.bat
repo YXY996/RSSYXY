@@ -28,8 +28,9 @@ if exist "C:\Users\wisdom\Documents\Codex\AI-Launcher\Start-Gateway-Stack.ps1" (
 
 REM ===== 2. 拉取最新代码 =====
 call :log 拉取最新代码...
-git -C "%~dp0" pull --ff-only origin main
-if errorlevel 1 goto :failed
+REM 本地有未提交改动（如 config.yaml 本地密钥）时不阻断：使用 autostash 容错
+git pull --ff-only --autostash origin main
+if errorlevel 1 call :log 警告: git pull 失败（忽略，继续用本地版本）
 
 REM ===== 3. 确保虚拟环境 =====
 if not exist ".venv\Scripts\python.exe" (
